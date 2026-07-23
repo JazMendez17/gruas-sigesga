@@ -1,11 +1,56 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
+:root {
+    --font-family: 'Roboto', sans-serif;
+    --color-primary: #4F46E5;
+    --color-secondary: #7C3AED;
+    --color-bg: #E8EDF2;
+    --color-text: #1F2937;
+}
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+* {
+    font-family: var(--font-family), sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+@layer components {
+    .neumorphic-raised {
+        box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+    }
+
+    .neumorphic-raised-sm {
+        box-shadow: 4px 4px 8px #d0d5da, -4px -4px 8px #ffffff;
+    }
+
+    .neumorphic-pressed {
+        box-shadow: inset 6px 6px 12px #d0d5da, inset -6px -6px 12px #ffffff;
+    }
+
+    .neumorphic-pressed-sm {
+        box-shadow: inset 3px 3px 6px #d0d5da, inset -3px -3px 6px #ffffff;
+    }
+
+    .neumorphic-card {
+        @apply bg-[#EEF2F7] rounded-3xl;
+        box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+    }
+
+    .neumorphic-input {
+        @apply bg-[#E8EDF2] rounded-2xl;
+        box-shadow: inset 6px 6px 12px #d0d5da, inset -6px -6px 12px #ffffff;
+    }
+
+    .gradient-primary {
+        @apply bg-gradient-to-br from-indigo-500 to-purple-600;
+    }
 }

@@ -1,0 +1,115 @@
+<script setup>
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import { usePage } from '@inertiajs/vue3'
+import { computed } from 'vue'
+
+const page = usePage()
+const empresa = computed(() => page.props.empresa)
+
+const form = useForm({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+})
+
+const submit = () => {
+    form.post(route('register'), {
+        onFinish: () => form.reset('password', 'password_confirmation'),
+    })
+}
+</script>
+
+<template>
+    <Head title="Registrarse" />
+
+    <div class="min-h-screen bg-[#E8EDF2] flex items-center justify-center p-4">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200">
+                    {{ empresa?.siglas?.charAt(0) || 'S' }}
+                </div>
+                <h1 class="text-2xl font-bold text-[#1F2937]">Crear Cuenta</h1>
+                <p class="text-sm text-[#6B7280] mt-1">{{ empresa?.nombre || 'SIGESGA' }}</p>
+            </div>
+
+            <div class="neumorphic-card p-8">
+                <form @submit.prevent="submit">
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-[#4B5563] mb-2">Nombre completo</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-[#9CA3AF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            <input v-model="form.name" type="text" placeholder="Tu nombre" required autofocus autocomplete="name"
+                                class="w-full bg-[#E8EDF2] text-[#1F2937] placeholder-[#9CA3AF] rounded-2xl py-3 pl-12 pr-4 shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                        </div>
+                        <p v-if="form.errors.name" class="mt-2 text-sm text-red-500">{{ form.errors.name }}</p>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-[#4B5563] mb-2">Correo electrónico</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-[#9CA3AF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                </svg>
+                            </div>
+                            <input v-model="form.email" type="email" placeholder="tu@correo.com" required autocomplete="username"
+                                class="w-full bg-[#E8EDF2] text-[#1F2937] placeholder-[#9CA3AF] rounded-2xl py-3 pl-12 pr-4 shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                        </div>
+                        <p v-if="form.errors.email" class="mt-2 text-sm text-red-500">{{ form.errors.email }}</p>
+                    </div>
+
+                    <div class="mb-5">
+                        <label class="block text-sm font-medium text-[#4B5563] mb-2">Contraseña</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-[#9CA3AF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </div>
+                            <input v-model="form.password" type="password" placeholder="••••••••" required autocomplete="new-password"
+                                class="w-full bg-[#E8EDF2] text-[#1F2937] placeholder-[#9CA3AF] rounded-2xl py-3 pl-12 pr-4 shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                        </div>
+                        <p v-if="form.errors.password" class="mt-2 text-sm text-red-500">{{ form.errors.password }}</p>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-[#4B5563] mb-2">Confirmar contraseña</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="w-5 h-5 text-[#9CA3AF]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                </svg>
+                            </div>
+                            <input v-model="form.password_confirmation" type="password" placeholder="••••••••" required autocomplete="new-password"
+                                class="w-full bg-[#E8EDF2] text-[#1F2937] placeholder-[#9CA3AF] rounded-2xl py-3 pl-12 pr-4 shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+                        </div>
+                    </div>
+
+                    <button type="submit" :disabled="form.processing"
+                        class="w-full py-3 px-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50">
+                        <span v-if="form.processing" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2 align-middle"></span>
+                        Crear Cuenta
+                    </button>
+                </form>
+            </div>
+
+            <p class="text-center mt-6 text-sm text-[#6B7280]">
+                ¿Ya tienes cuenta?
+                <Link :href="route('login')" class="text-indigo-600 hover:text-indigo-800 font-medium">Inicia sesión</Link>
+            </p>
+        </div>
+    </div>
+</template>
+
+<style scoped>
+.neumorphic-card {
+    background: #EEF2F7;
+    border-radius: 24px;
+    box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+}
+</style>
