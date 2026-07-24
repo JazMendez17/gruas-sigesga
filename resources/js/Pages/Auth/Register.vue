@@ -13,6 +13,21 @@ const form = useForm({
     password_confirmation: '',
 })
 
+const strength = computed(() => {
+    const pwd = form.password
+    if (!pwd) return { level: 0, label: '', color: '', bg: '', width: '0%' }
+
+    let score = 0
+    if (pwd.length >= 8) score++
+    if (/[a-z]/.test(pwd) && /[A-Z]/.test(pwd)) score++
+    if (/\d/.test(pwd)) score++
+    if (/[^a-zA-Z0-9]/.test(pwd)) score++
+
+    if (score <= 1) return { level: 1, label: 'Baja', color: 'text-red-600', bg: 'bg-red-500', width: '25%' }
+    if (score <= 3) return { level: 2, label: 'Media', color: 'text-yellow-600', bg: 'bg-yellow-400', width: '60%' }
+    return { level: 3, label: 'Segura', color: 'text-green-600', bg: 'bg-green-500', width: '100%' }
+})
+
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
@@ -26,7 +41,7 @@ const submit = () => {
     <div class="min-h-screen bg-[#E8EDF2] flex items-center justify-center p-4">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200" :style="{ backgroundColor: 'var(--color-primary)' }">
                     {{ empresa?.siglas?.charAt(0) || 'S' }}
                 </div>
                 <h1 class="text-2xl font-bold text-[#1F2937]">Crear Cuenta</h1>
@@ -74,6 +89,12 @@ const submit = () => {
                             <input v-model="form.password" type="password" placeholder="••••••••" required autocomplete="new-password"
                                 class="w-full bg-[#E8EDF2] text-[#1F2937] placeholder-[#9CA3AF] rounded-2xl py-3 pl-12 pr-4 shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
                         </div>
+                        <div v-if="form.password" class="mt-3">
+                            <div class="h-1.5 w-full bg-gray-200 rounded-full overflow-hidden">
+                                <div :class="strength.bg" class="h-full rounded-full transition-all duration-300" :style="{ width: strength.width }"></div>
+                            </div>
+                            <p :class="strength.color" class="mt-1 text-xs font-medium">{{ strength.label }}</p>
+                        </div>
                         <p v-if="form.errors.password" class="mt-2 text-sm text-red-500">{{ form.errors.password }}</p>
                     </div>
 
@@ -91,7 +112,7 @@ const submit = () => {
                     </div>
 
                     <button type="submit" :disabled="form.processing"
-                        class="w-full py-3 px-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50">
+                        class="w-full py-3 px-6 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50" :style="{ backgroundColor: 'var(--color-primary)' }">
                         <span v-if="form.processing" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2 align-middle"></span>
                         Crear Cuenta
                     </button>

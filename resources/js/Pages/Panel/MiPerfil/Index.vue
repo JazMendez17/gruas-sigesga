@@ -62,7 +62,7 @@ function cambiarPassword() {
         <!-- User Info -->
         <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] lg:col-span-1 space-y-5">
           <div class="flex flex-col items-center">
-            <div class="flex h-24 w-24 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 text-3xl font-bold text-white shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+            <div class="flex h-24 w-24 items-center justify-center rounded-3xl text-3xl font-bold text-white shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]" :style="{ backgroundColor: 'var(--color-primary)' }">
               {{ user.nombre.charAt(0) }}
             </div>
             <h2 class="mt-4 text-xl font-bold text-gray-800">{{ user.nombre }}</h2>
@@ -103,7 +103,7 @@ function cambiarPassword() {
                 <div class="mt-1">
                   <div
                     class="h-2.5 w-2.5 rounded-full"
-                    :class="notif.estado === 'no_leido' ? 'bg-indigo-500' : 'bg-gray-300'"
+                    :class="notif.estado === 'no_leido' ? 'bg-[var(--color-primary)]' : 'bg-gray-300'"
                   ></div>
                 </div>
                 <div class="flex-1 min-w-0">

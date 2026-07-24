@@ -32,12 +32,14 @@ class ConfiguracionController extends Controller
             'email_contacto' => 'nullable|email|max:255',
             'color_primario' => 'nullable|string|max:20',
             'color_secundario' => 'nullable|string|max:20',
-            'color_fondo' => 'nullable|string|max:20',
             'color_texto' => 'nullable|string|max:20',
             'tipografia' => 'nullable|string|max:100',
+            'modo_oscuro' => 'nullable|boolean',
             'logo' => 'nullable|string|max:500',
             'imagen_fondo' => 'nullable|string|max:500',
         ]);
+
+        $data['modo_oscuro'] = $request->boolean('modo_oscuro');
 
         $empresa->update($data);
 

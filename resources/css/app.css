@@ -23,31 +23,42 @@ body {
     color: var(--color-text);
 }
 
+:where(h1, h2, h3, h4, h5, h6, p, label, th, td, li) {
+    color: var(--color-text);
+}
+
+.text-gray-500, .text-gray-600, .text-gray-700, .text-gray-800,
+.text-\[\#1F2937\], .text-\[\#374151\], .text-\[\#4B5563\], .text-\[\#6B7280\] {
+    color: var(--color-text);
+}
+
 @layer components {
     .neumorphic-raised {
-        box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+        box-shadow: 8px 8px 16px var(--neumorphic-dark, #d0d5da), -8px -8px 16px var(--neumorphic-light, #ffffff);
     }
 
     .neumorphic-raised-sm {
-        box-shadow: 4px 4px 8px #d0d5da, -4px -4px 8px #ffffff;
+        box-shadow: 4px 4px 8px var(--neumorphic-dark, #d0d5da), -4px -4px 8px var(--neumorphic-light, #ffffff);
     }
 
     .neumorphic-pressed {
-        box-shadow: inset 6px 6px 12px #d0d5da, inset -6px -6px 12px #ffffff;
+        box-shadow: inset 6px 6px 12px var(--neumorphic-dark, #d0d5da), inset -6px -6px 12px var(--neumorphic-light, #ffffff);
     }
 
     .neumorphic-pressed-sm {
-        box-shadow: inset 3px 3px 6px #d0d5da, inset -3px -3px 6px #ffffff;
+        box-shadow: inset 3px 3px 6px var(--neumorphic-dark, #d0d5da), inset -3px -3px 6px var(--neumorphic-light, #ffffff);
     }
 
     .neumorphic-card {
-        @apply bg-[#EEF2F7] rounded-3xl;
-        box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+        @apply rounded-3xl;
+        background-color: var(--color-bg, #EEF2F7);
+        box-shadow: 8px 8px 16px var(--neumorphic-dark, #d0d5da), -8px -8px 16px var(--neumorphic-light, #ffffff);
     }
 
     .neumorphic-input {
-        @apply bg-[#E8EDF2] rounded-2xl;
-        box-shadow: inset 6px 6px 12px #d0d5da, inset -6px -6px 12px #ffffff;
+        @apply rounded-2xl;
+        background-color: var(--color-bg, #E8EDF2);
+        box-shadow: inset 6px 6px 12px var(--neumorphic-dark, #d0d5da), inset -6px -6px 12px var(--neumorphic-light, #ffffff);
     }
 
     .gradient-primary {

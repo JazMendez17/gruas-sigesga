@@ -94,7 +94,7 @@ function canShowItem(item) {
   >
     <div class="flex flex-col h-full p-4">
       <div class="flex items-center gap-3 px-4 py-6 mb-6 neumorphic-raised rounded-2xl">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg" :style="{ backgroundColor: 'var(--color-primary)' }">
           {{ empresa?.siglas?.charAt(0) || 'S' }}
         </div>
         <div>
@@ -106,7 +106,7 @@ function canShowItem(item) {
       <nav class="flex-1 overflow-y-auto space-y-6">
         <div v-for="group in menuGroups" :key="group.title">
           <div v-if="canShow(group)">
-            <p class="text-[#6B7280] text-xs font-semibold uppercase tracking-wider px-4 mb-2">{{ group.title }}</p>
+            <p class="text-xs font-semibold uppercase tracking-wider px-4 mb-2" :style="{ color: 'var(--color-secondary)' }">{{ group.title }}</p>
             <div class="space-y-1">
               <template v-for="item in group.items" :key="item.label">
                 <Link
@@ -115,8 +115,8 @@ function canShowItem(item) {
                 :class="[
                   'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                   route().current(item.route)
-                    ? 'neumorphic-pressed text-indigo-600'
-                    : 'text-[#4B5563] hover:neumorphic-raised hover:text-indigo-600'
+                    ? 'neumorphic-pressed text-[var(--color-primary)]'
+                    : 'text-[#4B5563] hover:neumorphic-raised hover:text-[var(--color-primary)]'
                 ]"
               >
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">

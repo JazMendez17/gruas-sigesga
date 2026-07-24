@@ -30,7 +30,7 @@ const submit = () => {
     <div class="min-h-screen bg-[#E8EDF2] flex items-center justify-center p-4">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200" :style="{ backgroundColor: 'var(--color-primary)' }">
                     {{ empresa?.siglas?.charAt(0) || 'S' }}
                 </div>
                 <h1 class="text-2xl font-bold text-[#1F2937]">Iniciar Sesión</h1>
@@ -86,7 +86,7 @@ const submit = () => {
 
                     <div class="flex items-center justify-between mb-6">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" v-model="form.remember" class="w-4 h-4 rounded-lg bg-[#E8EDF2] border-0 shadow-[inset_2px_2px_4px_#d0d5da,inset_-2px_-2px_4px_#ffffff] text-indigo-600 focus:ring-indigo-500" />
+                            <input type="checkbox" v-model="form.remember" class="w-4 h-4 rounded-lg bg-[#E8EDF2] border-0 shadow-[inset_2px_2px_4px_#d0d5da,inset_-2px_-2px_4px_#ffffff] text-indigo-600 focus:ring-[var(--color-primary)]" />
                             <span class="text-sm text-[#6B7280]">Recordarme</span>
                         </label>
                         <Link v-if="canResetPassword" :href="route('password.request')" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
@@ -97,7 +97,7 @@ const submit = () => {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="w-full py-3 px-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50"
+                        class="w-full py-3 px-6 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50" :style="{ backgroundColor: 'var(--color-primary)' }"
                     >
                         <span v-if="form.processing" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2 align-middle"></span>
                         Iniciar Sesión

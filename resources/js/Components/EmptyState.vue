@@ -20,7 +20,7 @@ defineProps({
     <Link
       v-if="action"
       :href="action.url"
-      class="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl text-sm font-medium shadow-lg shadow-indigo-200"
+      class="inline-flex items-center gap-2 px-6 py-2.5 text-white rounded-2xl text-sm font-medium shadow-lg shadow-indigo-200" :style="{ backgroundColor: 'var(--color-primary)' }"
     >
       {{ action.label }}
     </Link>

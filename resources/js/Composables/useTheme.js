@@ -19,12 +19,14 @@ export function useTheme() {
 
   const empresa = computed(() => page.props.empresa)
 
+  const isDark = computed(() => empresa.value?.modo_oscuro ?? false)
+
   const fontFamily = computed(() => empresa.value?.tipografia || 'Roboto')
 
   const primaryColor = computed(() => empresa.value?.color_primario || '#4F46E5')
   const secondaryColor = computed(() => empresa.value?.color_secundario || '#7C3AED')
-  const bgColor = computed(() => empresa.value?.color_fondo || '#E8EDF2')
-  const textColor = computed(() => empresa.value?.color_texto || '#1F2937')
+  const bgColor = computed(() => isDark.value ? '#111827' : (empresa.value?.color_fondo || '#E8EDF2'))
+  const textColor = computed(() => isDark.value ? '#F3F4F6' : (empresa.value?.color_texto || '#1F2937'))
 
   const moduloColores = computed(() => ({
     ...defaultModuloColores,
@@ -60,9 +62,14 @@ export function useTheme() {
       document.documentElement.style.setProperty(`--color-modulo-${modulo}`, color)
     })
 
-    const bg = bgColor.value
-    if (bg) {
-      document.documentElement.style.setProperty('--neumorphic-shadow', `${bg}`)
+    if (isDark.value) {
+      document.documentElement.style.setProperty('--neumorphic-light', '#1e293b')
+      document.documentElement.style.setProperty('--neumorphic-dark', '#0f172a')
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.style.setProperty('--neumorphic-light', '#ffffff')
+      document.documentElement.style.setProperty('--neumorphic-dark', '#d0d5da')
+      document.documentElement.classList.remove('dark')
     }
   }
 

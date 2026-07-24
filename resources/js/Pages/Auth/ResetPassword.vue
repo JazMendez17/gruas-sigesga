@@ -26,7 +26,7 @@ const submit = () => { form.post(route('password.store'), { onFinish: () => form
     <div class="min-h-screen bg-[#E8EDF2] flex items-center justify-center p-4">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200" :style="{ backgroundColor: 'var(--color-primary)' }">
                     {{ empresa?.siglas?.charAt(0) || 'S' }}
                 </div>
                 <h1 class="text-2xl font-bold text-[#1F2937]">Restablecer Contraseña</h1>
@@ -75,7 +75,7 @@ const submit = () => { form.post(route('password.store'), { onFinish: () => form
                     </div>
 
                     <button type="submit" :disabled="form.processing"
-                        class="w-full py-3 px-6 bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50">
+                        class="w-full py-3 px-6 text-white font-medium rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 transition-all duration-200 disabled:opacity-50" :style="{ backgroundColor: 'var(--color-primary)' }">
                         <span v-if="form.processing" class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
                         Restablecer contraseña
                     </button>

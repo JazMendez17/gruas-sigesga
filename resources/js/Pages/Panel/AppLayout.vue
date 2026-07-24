@@ -1,7 +1,10 @@
 <script setup>
 import { ref, provide } from 'vue'
+import { useTheme } from '@/Composables/useTheme'
 import Sidebar from '@/Components/Sidebar.vue'
 import Navbar from '@/Components/Navbar.vue'
+
+useTheme()
 
 const sidebarOpen = ref(false)
 
@@ -14,7 +17,7 @@ provide('toggleSidebar', toggleSidebar)
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#E8EDF2]">
+  <div class="min-h-screen bg-[var(--color-bg)]">
     <div
       v-show="sidebarOpen"
       class="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"

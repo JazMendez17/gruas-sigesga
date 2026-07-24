@@ -1,29 +1,41 @@
 <script setup>
-import { ref } from 'vue'
-import { useForm, router } from '@inertiajs/vue3'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useForm, usePage, router } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
 import NeumorphicButton from '@/Components/NeumorphicButton.vue'
 import NeumorphicInput from '@/Components/NeumorphicInput.vue'
 
+const page = usePage()
+const empresaData = page.props.empresa || {}
+
 const activeTab = ref('general')
+const fontOpen = ref(false)
 
 const form = useForm({
-  nombre: 'Grúas y Equipos del Valle, S.A. de C.V.',
-  siglas: 'GEV',
-  slogan: 'Asistencia vial conectada: del mapa a la ruta en un solo clic',
-  texto_derechos: '© 2026 Grúas y Equipos del Valle. Todos los derechos reservados.',
-  telefono_contacto: '55-1234-5678',
-  email_contacto: 'contacto@gevsigesga.com',
-  color_primario: '#4F46E5',
-  color_secundario: '#7C3AED',
-  color_fondo: '#E8EDF2',
-  color_texto: '#1F2937',
-  tipografia: 'Inter',
-  logo: '',
-  imagen_fondo: '',
+  nombre: empresaData.nombre || '',
+  siglas: empresaData.siglas || '',
+  slogan: empresaData.slogan || '',
+  texto_derechos: empresaData.texto_derechos || '',
+  telefono_contacto: empresaData.telefono_contacto || '',
+  email_contacto: empresaData.email_contacto || '',
+  color_primario: empresaData.color_primario || '#4F46E5',
+  color_secundario: empresaData.color_secundario || '#7C3AED',
+  color_texto: empresaData.color_texto || '#1F2937',
+  tipografia: empresaData.tipografia || 'Inter',
+  modo_oscuro: empresaData.modo_oscuro || false,
+  logo: empresaData.logo || '',
+  imagen_fondo: empresaData.imagen_fondo || '',
 })
 
-const fonts = ['Inter', 'Roboto', 'Poppins', 'Montserrat', 'Lato', 'Open Sans', 'Raleway', 'Nunito']
+const fonts = [
+  'Inter', 'Roboto', 'Poppins', 'Montserrat', 'Nunito', 'Lato',
+  'Open Sans', 'Raleway', 'Work Sans', 'Quicksand', 'Manrope',
+  'DM Sans', 'Sora', 'Outfit', 'Plus Jakarta Sans', 'Jost',
+  'Figtree', 'Lexend', 'Urbanist', 'Be Vietnam Pro', 'Space Grotesk',
+  'Epilogue', 'Barlow', 'Rubik', 'Nunito Sans', 'Mulish',
+  'Public Sans', 'Chakra Petch', 'Prompt', 'Karla', 'IBM Plex Sans',
+  'Hanken Grotesk', 'Cabinet Grotesk', 'General Sans',
+]
 
 function guardarCambios() {
   form.post(route('panel.configuracion.update'), {
@@ -56,6 +68,36 @@ function uploadFile(type) {
 }
 
 const previewCard = { title: 'Vista Previa', content: 'Este es un ejemplo de cómo se verán los textos con la configuración actual.' }
+
+function loadAllFonts() {
+  const loaded = document.getElementById('sigesga-fonts-loaded')
+  if (loaded) return
+  const marker = document.createElement('span')
+  marker.id = 'sigesga-fonts-loaded'
+  marker.style.display = 'none'
+  document.head.appendChild(marker)
+  fonts.forEach(f => {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = `https://fonts.googleapis.com/css2?family=${f.replace(/\s+/g, '+')}:wght@300;400;500;600;700;800&display=swap`
+    document.head.appendChild(link)
+  })
+}
+
+function toggleFontOpen() {
+  fontOpen.value = !fontOpen.value
+}
+
+function onClickOutside(e) {
+  const el = document.getElementById('font-selector')
+  if (el && !el.contains(e.target)) fontOpen.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('mousedown', onClickOutside)
+  loadAllFonts()
+})
+onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
 </script>
 
 <template>
@@ -112,7 +154,7 @@ const previewCard = { title: 'Vista Previa', content: 'Este es un ejemplo de có
       <!-- Apariencia -->
       <div v-if="activeTab === 'apariencia'" class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] space-y-6">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <div v-for="clave in ['primario', 'secundario', 'fondo', 'texto']" :key="clave" class="space-y-2">
+          <div v-for="clave in ['primario', 'secundario', 'texto']" :key="clave" class="space-y-2">
             <label class="block text-sm font-medium text-[#4B5563] capitalize">{{ clave }}</label>
             <div class="flex items-center gap-3">
               <input type="color" :value="form['color_' + clave]" @input="form['color_' + clave] = $event.target.value" class="h-10 w-10 rounded-xl border-0 bg-transparent cursor-pointer" />
@@ -125,19 +167,55 @@ const previewCard = { title: 'Vista Previa', content: 'Este es un ejemplo de có
           </div>
         </div>
 
+        <div class="flex items-center justify-between rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+          <label class="text-sm font-medium text-[#4B5563]">Modo Oscuro</label>
+          <button
+            type="button"
+            @click="form.modo_oscuro = !form.modo_oscuro"
+            :class="form.modo_oscuro ? 'bg-indigo-600' : 'bg-gray-300'"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          >
+            <span
+              :class="form.modo_oscuro ? 'translate-x-6' : 'translate-x-1'"
+              class="pointer-events-none relative inline-block h-4 w-4 translate-y-1 transform rounded-full bg-white shadow ring-0 transition duration-200"
+            />
+          </button>
+        </div>
+
         <div class="space-y-2">
           <label class="block text-sm font-medium text-[#4B5563]">Tipografía</label>
-          <select
-            v-model="form.tipografia"
-            class="w-full rounded-2xl bg-[#E8EDF2] px-4 py-3 text-sm text-[#1F2937] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300"
-          >
-            <option v-for="f in fonts" :key="f" :value="f" :style="{ fontFamily: f }">{{ f }}</option>
-          </select>
+          <div id="font-selector" class="relative">
+            <button
+              type="button"
+              @click="toggleFontOpen()"
+              class="flex w-full items-center justify-between rounded-2xl bg-[#E8EDF2] px-4 py-3 text-sm text-[#1F2937] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300"
+              :style="{ fontFamily: form.tipografia }"
+            >
+              {{ form.tipografia }}
+              <svg class="h-4 w-4 text-gray-500 transition-transform duration-200" :class="{ 'rotate-180': fontOpen }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+            </button>
+            <div
+              v-if="fontOpen"
+              class="absolute z-50 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl bg-[#EEF2F7] p-2 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]"
+            >
+              <button
+                v-for="f in fonts"
+                :key="f"
+                type="button"
+                @click="form.tipografia = f; fontOpen = false"
+                class="flex w-full items-center rounded-xl px-4 py-2.5 text-left text-sm transition-colors hover:bg-[#E8EDF2]"
+                :class="form.tipografia === f ? 'bg-[#E8EDF2] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff]' : ''"
+                :style="{ fontFamily: f }"
+              >
+                {{ f }}
+              </button>
+            </div>
+          </div>
         </div>
 
         <div
           class="rounded-3xl p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]"
-          :style="{ backgroundColor: form.color_fondo, color: form.color_texto, fontFamily: form.tipografia }"
+          :style="{ backgroundColor: form.modo_oscuro ? '#1F2937' : '#E8EDF2', color: form.modo_oscuro ? '#F3F4F6' : form.color_texto, fontFamily: form.tipografia }"
         >
           <h3 class="text-lg font-bold">{{ previewCard.title }}</h3>
           <p class="mt-2 text-sm">{{ previewCard.content }}</p>
