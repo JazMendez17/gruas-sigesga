@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
+use App\Models\EmpresaNosotros;
+use App\Models\EmpresaValore;
+use App\Models\EmpresaServicio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -11,7 +14,27 @@ class ConfiguracionController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Panel/Configuracion/Index');
+        $user = Auth::user();
+        $empresa = $user->empresa;
+
+        return Inertia::render('Panel/Configuracion/Index', [
+            'nosotros' => $empresa?->empresaNosotros ?? [
+                'quienes_somos' => '',
+                'mision' => '',
+                'vision' => '',
+            ],
+            'valores' => $empresa?->empresaValores?->map(fn ($v) => [
+                'id' => $v->id,
+                'valor' => $v->valor,
+                'descripcion' => $v->descripcion,
+            ]) ?? [],
+            'servicios_landing' => $empresa?->empresaServicios?->map(fn ($s) => [
+                'id' => $s->id,
+                'tipo' => $s->tipo,
+                'descripcion' => $s->descripcion,
+                'foto' => $s->foto,
+            ]) ?? [],
+        ]);
     }
 
     public function update(Request $request)
@@ -42,6 +65,44 @@ class ConfiguracionController extends Controller
         $data['modo_oscuro'] = $request->boolean('modo_oscuro');
 
         $empresa->update($data);
+
+        // Guardar Nosotros
+        $nosotrosData = $request->input('nosotros', []);
+        EmpresaNosotros::updateOrCreate(
+            ['empresa_id' => $empresa->id],
+            [
+                'quienes_somos' => $nosotrosData['quienes_somos'] ?? '',
+                'mision' => $nosotrosData['mision'] ?? '',
+                'vision' => $nosotrosData['vision'] ?? '',
+            ]
+        );
+
+        // Guardar Valores
+        $valoresData = $request->input('valores', []);
+        if (!empty($valoresData)) {
+            $empresa->empresaValores()->delete();
+            foreach ($valoresData as $i => $v) {
+                $empresa->empresaValores()->create([
+                    'valor' => $v['valor'] ?? '',
+                    'descripcion' => $v['descripcion'] ?? '',
+                    'orden' => $i,
+                ]);
+            }
+        }
+
+        // Guardar Servicios (landing)
+        $serviciosData = $request->input('servicios_landing', []);
+        if (!empty($serviciosData)) {
+            $empresa->empresaServicios()->delete();
+            foreach ($serviciosData as $i => $s) {
+                $empresa->empresaServicios()->create([
+                    'tipo' => $s['tipo'] ?? '',
+                    'descripcion' => $s['descripcion'] ?? '',
+                    'foto' => $s['foto'] ?? null,
+                    'orden' => $i,
+                ]);
+            }
+        }
 
         return back()->with('success', 'Configuración guardada correctamente');
     }

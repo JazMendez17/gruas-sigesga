@@ -88,7 +88,7 @@ function canShowItem(item) {
 <template>
   <aside
     :class="[
-      'fixed inset-y-0 left-0 z-40 w-64 bg-[#EEF2F7] transform transition-transform duration-300 lg:translate-x-0',
+      'fixed inset-y-0 left-0 z-40 w-64 bg-[var(--color-bg)] transform transition-transform duration-300 lg:translate-x-0',
       sidebarOpen ? 'translate-x-0' : '-translate-x-full',
     ]"
   >
@@ -98,8 +98,8 @@ function canShowItem(item) {
           {{ empresa?.siglas?.charAt(0) || 'S' }}
         </div>
         <div>
-          <h2 class="font-semibold text-[#1F2937] text-sm">{{ empresa?.siglas || 'SIGESGA' }}</h2>
-          <p class="text-[#6B7280] text-xs">{{ empresa?.nombre?.substring(0, 20) || 'Sistema de Gestión' }}</p>
+          <h2 class="font-semibold text-[var(--color-text)] text-sm">{{ empresa?.siglas || 'SIGESGA' }}</h2>
+          <p class="text-[var(--color-text)] opacity-60 text-xs">{{ empresa?.nombre?.substring(0, 20) || 'Sistema de Gestión' }}</p>
         </div>
       </div>
 
@@ -116,7 +116,7 @@ function canShowItem(item) {
                   'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                   route().current(item.route)
                     ? 'neumorphic-pressed text-[var(--color-primary)]'
-                    : 'text-[#4B5563] hover:neumorphic-raised hover:text-[var(--color-primary)]'
+                    : 'text-[var(--color-text)] opacity-70 hover:neumorphic-raised hover:text-[var(--color-primary)] hover:opacity-100'
                 ]"
               >
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
@@ -132,7 +132,7 @@ function canShowItem(item) {
 
       <div class="mt-auto pt-4">
         <div class="neumorphic-raised rounded-2xl p-3">
-          <p class="text-[#6B7280] text-xs text-center">{{ empresa?.texto_derechos || '© 2026 SIGESGA' }}</p>
+          <p class="text-[var(--color-text)] opacity-60 text-xs text-center">{{ empresa?.texto_derechos || '© 2026 SIGESGA' }}</p>
         </div>
       </div>
     </div>
@@ -141,9 +141,9 @@ function canShowItem(item) {
 
 <style scoped>
 .neumorphic-raised {
-  box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+  box-shadow: 8px 8px 16px var(--neumorphic-dark, #d0d5da), -8px -8px 16px var(--neumorphic-light, #ffffff);
 }
 .neumorphic-pressed {
-  box-shadow: inset 4px 4px 8px #d0d5da, inset -4px -4px 8px #ffffff;
+  box-shadow: inset 4px 4px 8px var(--neumorphic-dark, #d0d5da), inset -4px -4px 8px var(--neumorphic-light, #ffffff);
 }
 </style>

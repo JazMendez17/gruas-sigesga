@@ -13,8 +13,7 @@ class EmpresaNosotros extends Model
 
     protected $fillable = [
         'empresa_id',
-        'titulo',
-        'descripcion',
+        'quienes_somos',
         'mision',
         'vision',
     ];

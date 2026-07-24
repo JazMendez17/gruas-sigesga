@@ -94,6 +94,8 @@ const submitContacto = () => {
     form.mensaje = ''
 }
 
+const flash = computed(() => usePage().props.flash || {})
+
 const icons = {
     shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>',
     heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>',
@@ -124,6 +126,16 @@ const getIcon = (name) => icons[name] || ''
     <Head :title="empresa.nombre || 'SIGESGA'" />
 
     <div :style="cssVars" class="bg-[#E8EDF2] min-h-screen text-gray-800">
+        <div v-if="flash.success" class="fixed top-4 right-4 z-[100] max-w-sm p-4 rounded-2xl bg-emerald-50 text-emerald-800 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] flex items-center gap-3 animate-[slideIn_0.3s_ease-out]">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <p class="text-sm font-medium">{{ flash.success }}</p>
+            <button @click="flash.success = null" class="ml-auto text-emerald-600 hover:text-emerald-800">&times;</button>
+        </div>
+        <div v-if="flash.error" class="fixed top-4 right-4 z-[100] max-w-sm p-4 rounded-2xl bg-red-50 text-red-800 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] flex items-center gap-3 animate-[slideIn_0.3s_ease-out]">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            <p class="text-sm font-medium">{{ flash.error }}</p>
+            <button @click="flash.error = null" class="ml-auto text-red-600 hover:text-red-800">&times;</button>
+        </div>
         <nav :class="[
             scrolled
                 ? 'bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]'
@@ -462,5 +474,9 @@ html {
 }
 body {
     background-color: #E8EDF2;
+}
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 </style>

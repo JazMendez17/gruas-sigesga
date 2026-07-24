@@ -32,6 +32,46 @@ body {
     color: var(--color-text);
 }
 
+.bg-\[\#E8EDF2\] {
+    background-color: var(--color-bg, #E8EDF2) !important;
+}
+
+.bg-\[\#EEF2F7\] {
+    background-color: var(--color-surface, #EEF2F7) !important;
+}
+
+[class*="shadow-[8px_8px_16px_#d0d5da"] {
+    box-shadow: 8px 8px 16px var(--neumorphic-dark, #d0d5da), -8px -8px 16px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[4px_4px_8px_#d0d5da"] {
+    box-shadow: 4px 4px 8px var(--neumorphic-dark, #d0d5da), -4px -4px 8px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[6px_6px_12px_#d0d5da"] {
+    box-shadow: 6px 6px 12px var(--neumorphic-dark, #d0d5da), -6px -6px 12px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[inset_6px_6px_12px_#d0d5da"] {
+    box-shadow: inset 6px 6px 12px var(--neumorphic-dark, #d0d5da), inset -6px -6px 12px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[inset_4px_4px_8px_#d0d5da"] {
+    box-shadow: inset 4px 4px 8px var(--neumorphic-dark, #d0d5da), inset -4px -4px 8px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[inset_3px_3px_6px_#d0d5da"] {
+    box-shadow: inset 3px 3px 6px var(--neumorphic-dark, #d0d5da), inset -3px -3px 6px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[3px_3px_6px_#d0d5da"] {
+    box-shadow: 3px 3px 6px var(--neumorphic-dark, #d0d5da), -3px -3px 6px var(--neumorphic-light, #ffffff) !important;
+}
+
+[class*="shadow-[12px_12px_24px_#c9ced3"] {
+    box-shadow: 12px 12px 24px var(--neumorphic-dark, #d0d5da), -12px -12px 24px var(--neumorphic-light, #ffffff) !important;
+}
+
 @layer components {
     .neumorphic-raised {
         box-shadow: 8px 8px 16px var(--neumorphic-dark, #d0d5da), -8px -8px 16px var(--neumorphic-light, #ffffff);

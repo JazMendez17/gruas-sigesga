@@ -10,4 +10,19 @@ class LandingController extends Controller
     {
         return Inertia::render('Landing/Index');
     }
+
+    public function solicitar()
+    {
+        return Inertia::render('Landing/SolicitarServicio');
+    }
+
+    public function rastrear()
+    {
+        return Inertia::render('Landing/RastrearServicio');
+    }
+
+    public function soporte()
+    {
+        return Inertia::render('Landing/Soporte');
+    }
 }

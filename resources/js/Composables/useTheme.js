@@ -58,19 +58,21 @@ export function useTheme() {
     document.documentElement.style.setProperty('--color-bg', bgColor.value)
     document.documentElement.style.setProperty('--color-text', textColor.value)
 
-    Object.entries(moduloColores.value).forEach(([modulo, color]) => {
-      document.documentElement.style.setProperty(`--color-modulo-${modulo}`, color)
-    })
-
     if (isDark.value) {
+      document.documentElement.style.setProperty('--color-surface', '#1e293b')
       document.documentElement.style.setProperty('--neumorphic-light', '#1e293b')
       document.documentElement.style.setProperty('--neumorphic-dark', '#0f172a')
       document.documentElement.classList.add('dark')
     } else {
+      document.documentElement.style.setProperty('--color-surface', '#EEF2F7')
       document.documentElement.style.setProperty('--neumorphic-light', '#ffffff')
       document.documentElement.style.setProperty('--neumorphic-dark', '#d0d5da')
       document.documentElement.classList.remove('dark')
     }
+
+    Object.entries(moduloColores.value).forEach(([modulo, color]) => {
+      document.documentElement.style.setProperty(`--color-modulo-${modulo}`, color)
+    })
   }
 
   onMounted(() => {

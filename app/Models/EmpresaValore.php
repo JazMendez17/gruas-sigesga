@@ -9,13 +9,15 @@ class EmpresaValore extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'empresa_valores';
 
     protected $fillable = [
         'empresa_id',
-        'titulo',
+        'valor',
         'descripcion',
-        'icono',
+        'orden',
     ];
 
     public function empresa()

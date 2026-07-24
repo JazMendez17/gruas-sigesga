@@ -19,13 +19,16 @@ use App\Http\Controllers\Panel\OperadoresController;
 use App\Http\Controllers\Panel\UsuariosController;
 use App\Http\Controllers\Panel\ConfiguracionController;
 use App\Http\Controllers\Panel\IntegracionesController;
-use App\Http\Controllers\Panel\NotificacionesController;
-use App\Http\Controllers\Panel\ReportesController;
-use App\Http\Controllers\Panel\PerfilController;
-use App\Http\Controllers\Panel\UploadController;
+use App\Http\Controllers\ContactoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index']);
+
+Route::post('/contacto', [ContactoController::class, 'store']);
+
+Route::get('/solicitar', [LandingController::class, 'solicitar']);
+Route::get('/rastrear', [LandingController::class, 'rastrear']);
+Route::get('/soporte', [LandingController::class, 'soporte']);
 
 Route::middleware(['auth'])->prefix('panel')->name('panel.')->group(function () {
 
