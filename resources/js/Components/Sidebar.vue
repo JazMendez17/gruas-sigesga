@@ -94,12 +94,15 @@ function canShowItem(item) {
   >
     <div class="flex flex-col h-full p-4">
       <div class="flex items-center gap-3 px-4 py-6 mb-6 neumorphic-raised rounded-2xl">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg" :style="{ backgroundColor: 'var(--color-primary)' }">
+        <div v-if="empresa?.logo" class="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
+          <img :src="'/storage/' + empresa.logo" class="w-full h-full object-cover" alt="Logo" />
+        </div>
+        <div v-else class="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold text-lg flex-shrink-0" :style="{ backgroundColor: 'var(--color-primary)' }">
           {{ empresa?.siglas?.charAt(0) || 'S' }}
         </div>
-        <div>
-          <h2 class="font-semibold text-[var(--color-text)] text-sm">{{ empresa?.siglas || 'SIGESGA' }}</h2>
-          <p class="text-[var(--color-text)] opacity-60 text-xs">{{ empresa?.nombre?.substring(0, 20) || 'Sistema de Gestión' }}</p>
+        <div class="min-w-0">
+          <h2 class="font-semibold text-[var(--color-text)] text-sm truncate">{{ empresa?.siglas || 'SIGESGA' }}</h2>
+          <p class="text-[var(--color-text)] opacity-60 text-xs truncate">{{ empresa?.nombre || 'Sistema de Gestión' }}</p>
         </div>
       </div>
 

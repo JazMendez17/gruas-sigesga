@@ -144,7 +144,7 @@ const getIcon = (name) => icons[name] || ''
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <a href="#inicio" @click.prevent="scrollTo('inicio')" class="flex items-center gap-3 group">
                     <div v-if="empresa.logo" class="w-10 h-10 rounded-2xl overflow-hidden shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]">
-                        <img :src="empresa.logo" :alt="empresa.nombre" class="w-full h-full object-contain" />
+                        <img :src="'/storage/' + empresa.logo" :alt="empresa.nombre" class="w-full h-full object-contain" />
                     </div>
                     <div v-else class="w-10 h-10 rounded-2xl bg-[#E8EDF2] flex items-center justify-center text-lg font-bold shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
                          :style="{ color: 'var(--color-primary)' }">
@@ -209,7 +209,7 @@ const getIcon = (name) => icons[name] || ''
 
         <section id="inicio" class="relative min-h-screen flex items-center overflow-hidden">
             <div v-if="empresa.imagen_fondo" class="absolute inset-0">
-                <img :src="empresa.imagen_fondo" alt="" class="w-full h-full object-cover" />
+                <img :src="'/storage/' + empresa.imagen_fondo" alt="" class="w-full h-full object-cover" />
             </div>
             <div v-else class="absolute inset-0 bg-gradient-to-br from-[#1e3a5f] via-[#2d5a87] to-[#1e3a5f]"></div>
             <div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-black/30"></div>
