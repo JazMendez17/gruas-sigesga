@@ -2,6 +2,9 @@
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import { usePage } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
+import { useTheme } from '@/Composables/useTheme'
+
+useTheme()
 
 const showPassword = ref(false)
 
@@ -32,7 +35,10 @@ const submit = () => {
     <div class="min-h-screen bg-[#E8EDF2] flex items-center justify-center p-4">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-indigo-200" :style="{ backgroundColor: 'var(--color-primary)' }">
+                <div v-if="empresa?.logo" class="w-20 h-20 mx-auto mb-4 rounded-2xl overflow-hidden shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)]">
+                    <img :src="'/storage/' + empresa.logo" class="w-full h-full object-contain" alt="Logo" />
+                </div>
+                <div v-else class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg" :style="{ backgroundColor: 'var(--color-primary)' }">
                     {{ empresa?.siglas?.charAt(0) || 'S' }}
                 </div>
                 <h1 class="text-2xl font-bold text-[#1F2937]">Iniciar Sesión</h1>
@@ -130,8 +136,8 @@ const submit = () => {
 
 <style scoped>
 .neumorphic-card {
-    background: #EEF2F7;
+    background: var(--color-surface);
     border-radius: 24px;
-    box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+    box-shadow: 8px 8px 16px var(--neumorphic-dark), -8px -8px 16px var(--neumorphic-light);
 }
 </style>

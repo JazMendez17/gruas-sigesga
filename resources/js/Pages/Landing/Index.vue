@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue'
 import { Head, router, usePage } from '@inertiajs/vue3'
+import { useTheme } from '@/Composables/useTheme'
+
+useTheme()
 
 const props = defineProps({
     canLogin: Boolean,
@@ -12,10 +15,10 @@ const scrolled = ref(false)
 const mobileMenuOpen = ref(false)
 
 const cssVars = computed(() => ({
-    '--color-primary': empresa.value.color_primario || '#2563eb',
-    '--color-secondary': empresa.value.color_secundario || '#059669',
+    '--color-primary': empresa.value.color_primario || '#4F46E5',
+    '--color-secondary': empresa.value.color_secundario || '#7C3AED',
     '--color-accent': empresa.value.color_secundario || '#d97706',
-    '--font-family': empresa.value.tipografia ? `"${empresa.value.tipografia}", sans-serif` : 'Inter, sans-serif',
+    '--font-family': empresa.value.tipografia ? `"${empresa.value.tipografia}", sans-serif` : 'Roboto, sans-serif',
 }))
 
 const handleScroll = () => {
@@ -125,7 +128,7 @@ const getIcon = (name) => icons[name] || ''
 <template>
     <Head :title="empresa.nombre || 'SIGESGA'" />
 
-    <div :style="cssVars" class="bg-[#E8EDF2] min-h-screen text-gray-800">
+    <div :style="cssVars" class="bg-[var(--color-bg)] min-h-screen" style="color: var(--color-text)">
         <div v-if="flash.success" class="fixed top-4 right-4 z-[100] max-w-sm p-4 rounded-2xl bg-emerald-50 text-emerald-800 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] flex items-center gap-3 animate-[slideIn_0.3s_ease-out]">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <p class="text-sm font-medium">{{ flash.success }}</p>
@@ -138,7 +141,7 @@ const getIcon = (name) => icons[name] || ''
         </div>
         <nav :class="[
             scrolled
-                ? 'bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]'
+                ? 'bg-[var(--color-bg)] shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]'
                 : 'bg-transparent',
         ]" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 px-4 md:px-8">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
@@ -473,7 +476,7 @@ html {
     scroll-behavior: smooth;
 }
 body {
-    background-color: #E8EDF2;
+    background-color: var(--color-bg);
 }
 @keyframes slideIn {
     from { transform: translateX(100%); opacity: 0; }
