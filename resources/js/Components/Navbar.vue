@@ -13,7 +13,7 @@ function logout() {
 </script>
 
 <template>
-  <header class="fixed top-0 right-0 left-0 lg:left-64 z-30 bg-[var(--color-bg)]/80 backdrop-blur-md">
+  <header class="fixed top-0 right-0 left-0 lg:left-64 z-30 bg-[var(--color-bg)]">
     <div class="flex items-center justify-between px-4 sm:px-6 h-16">
       <button @click="toggleSidebar" class="lg:hidden neumorphic-raised p-2 rounded-xl">
         <svg class="w-6 h-6 text-[var(--color-text)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
