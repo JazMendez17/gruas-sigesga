@@ -83,6 +83,9 @@ Route::middleware(['auth'])->prefix('panel')->name('panel.')->group(function () 
     });
 
     Route::get('/mi-perfil', [PerfilController::class, 'index'])->name('mi-perfil');
+    Route::put('/mi-perfil', [PerfilController::class, 'update'])->name('mi-perfil.update');
+    Route::put('/mi-perfil/password', [PerfilController::class, 'updatePassword'])->name('mi-perfil.password');
+    Route::post('/mi-perfil/foto', [PerfilController::class, 'updateFoto'])->name('mi-perfil.foto');
 });
 
 require __DIR__.'/auth.php';

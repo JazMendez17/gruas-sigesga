@@ -12,10 +12,11 @@ class UploadController extends Controller
     {
         $request->validate([
             'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'type' => 'required|in:logo,imagen_fondo,servicio',
+            'type' => 'required|in:logo,imagen_fondo,servicio,foto',
         ]);
 
-        $path = $request->file('file')->store('empresa', 'public');
+        $directory = $request->type === 'foto' ? 'fotos' : 'empresa';
+        $path = $request->file('file')->store($directory, 'public');
 
         return back()->with('success', 'Imagen subida correctamente')->with('uploaded_path', $path);
     }

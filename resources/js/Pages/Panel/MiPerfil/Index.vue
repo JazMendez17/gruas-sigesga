@@ -1,31 +1,17 @@
 <script setup>
 import { ref } from 'vue'
-import { router, useForm } from '@inertiajs/vue3'
+import { router, useForm, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
 import NeumorphicButton from '@/Components/NeumorphicButton.vue'
 import NeumorphicInput from '@/Components/NeumorphicInput.vue'
-import Badge from '@/Components/Badge.vue'
 
-const user = {
-  nombre: 'Juan Carlos Pérez López',
-  email: 'admin@sigesga.com',
-  rol: 'Administrador',
-  empresa: 'Grúas y Equipos del Valle, S.A. de C.V.',
-}
+const page = usePage()
+const usuario = page.props.usuario
 
-const passwordData = ref({
-  actual: '',
-  nueva: '',
-  confirmar: '',
+const profileForm = useForm({
+  email: usuario.email,
+  telefono: usuario.telefono || '',
 })
-
-const notificaciones = [
-  { id: 1, mensaje: 'Su servicio ha sido asignado al operador Roberto Méndez.', fecha: '23 Jul 2026 09:15', estado: 'leido' },
-  { id: 2, mensaje: 'Recordatorio: Cotización #00124 pendiente de revisión.', fecha: '22 Jul 2026 14:30', estado: 'leido' },
-  { id: 3, mensaje: 'Nuevo operador registrado en el sistema.', fecha: '21 Jul 2026 11:00', estado: 'no_leido' },
-  { id: 4, mensaje: 'Actualización de tarifas disponible.', fecha: '20 Jul 2026 18:45', estado: 'no_leido' },
-  { id: 5, mensaje: 'Mantenimiento programado para la unidad U-002.', fecha: '19 Jul 2026 10:20', estado: 'leido' },
-]
 
 const passwordForm = useForm({
   actual: '',
@@ -33,21 +19,48 @@ const passwordForm = useForm({
   confirmar: '',
 })
 
+const uploading = ref(false)
+
+function actualizarPerfil() {
+  profileForm.put(route('panel.mi-perfil.update'), {
+    preserveScroll: true,
+    onSuccess: () => {},
+  })
+}
+
 function cambiarPassword() {
   if (passwordForm.nueva !== passwordForm.confirmar) {
-    alert('Las contraseñas no coinciden')
+    passwordForm.setError('confirmar', 'Las contraseñas no coinciden')
     return
   }
-  passwordForm.put(route('password.update'), {
+  passwordForm.put(route('panel.mi-perfil.password'), {
     preserveScroll: true,
     onSuccess: () => {
       passwordForm.reset()
-      alert('Contraseña actualizada correctamente')
-    },
-    onError: () => {
-      alert('Error al actualizar la contraseña')
     },
   })
+}
+
+function uploadFoto(e) {
+  const file = e.target.files?.[0]
+  if (!file) return
+  uploading.value = true
+  router.post(route('panel.mi-perfil.foto'), {
+    foto: file,
+  }, {
+    preserveScroll: true,
+    onFinish: () => {
+      uploading.value = false
+      e.target.value = ''
+    },
+  })
+}
+
+const rolLabel = {
+  admin: 'Administrador',
+  cotizador: 'Cotizador',
+  operador: 'Operador',
+  cliente: 'Cliente',
 }
 </script>
 
@@ -55,63 +68,64 @@ function cambiarPassword() {
   <AppLayout>
     <div class="space-y-6">
       <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-bold text-gray-800">Mi Perfil</h1>
+        <h1 class="text-2xl font-bold" style="color: var(--color-text)">Mi Perfil</h1>
       </div>
 
       <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <!-- User Info -->
-        <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] lg:col-span-1 space-y-5">
+        <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] lg:col-span-1 space-y-5">
           <div class="flex flex-col items-center">
-            <div class="flex h-24 w-24 items-center justify-center rounded-3xl text-3xl font-bold text-white shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]" :style="{ backgroundColor: 'var(--color-primary)' }">
-              {{ user.nombre.charAt(0) }}
+            <div class="relative">
+              <div v-if="usuario.foto" class="w-28 h-28 rounded-3xl overflow-hidden shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
+                <img :src="'/storage/' + usuario.foto" class="w-full h-full object-cover" alt="Foto" />
+              </div>
+              <div v-else class="w-28 h-28 rounded-3xl flex items-center justify-center text-4xl font-bold text-white shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]" :style="{ backgroundColor: 'var(--color-primary)' }">
+                {{ usuario.name.charAt(0) }}
+              </div>
+              <label class="absolute -bottom-2 -right-2 w-9 h-9 rounded-xl bg-[var(--color-primary)] text-white flex items-center justify-center cursor-pointer shadow-[3px_3px_6px_var(--neumorphic-dark),-3px_-3px_6px_var(--neumorphic-light)] hover:scale-105 transition-transform">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" @change="uploadFoto" />
+              </label>
             </div>
-            <h2 class="mt-4 text-xl font-bold text-gray-800">{{ user.nombre }}</h2>
-            <p class="text-sm text-gray-500">{{ user.email }}</p>
+            <h2 class="mt-5 text-xl font-bold" style="color: var(--color-text)">{{ usuario.name }}</h2>
+            <p class="text-sm opacity-60" style="color: var(--color-text)">{{ usuario.email }}</p>
+            <div v-if="uploading" class="mt-2 flex items-center gap-2 text-sm" style="color: var(--color-primary)">
+              <span class="inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+              Subiendo...
+            </div>
           </div>
 
-          <div class="space-y-3 rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+          <div class="space-y-3 rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
             <div class="flex justify-between">
-              <span class="text-sm text-gray-500">Rol</span>
-              <Badge variant="info">{{ user.rol }}</Badge>
+              <span class="text-sm opacity-60" style="color: var(--color-text)">Rol</span>
+              <span class="text-sm font-semibold px-3 py-0.5 rounded-xl" :style="{ backgroundColor: 'var(--color-primary)', color: '#ffffff' }">{{ rolLabel[usuario.rol] || usuario.rol }}</span>
             </div>
             <div class="flex justify-between">
-              <span class="text-sm text-gray-500">Empresa</span>
-              <span class="text-sm font-medium text-gray-800 text-right max-w-[180px]">{{ user.empresa }}</span>
+              <span class="text-sm opacity-60" style="color: var(--color-text)">Empresa</span>
+              <span class="text-sm font-medium text-right max-w-[180px]" style="color: var(--color-text)">{{ usuario.empresa }}</span>
             </div>
           </div>
         </div>
 
         <div class="space-y-6 lg:col-span-2">
-          <!-- Cambiar Contraseña -->
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] space-y-4">
-            <h3 class="text-lg font-semibold text-gray-800">Cambiar Contraseña</h3>
-            <NeumorphicInput v-model="passwordForm.actual" type="password" label="Contraseña Actual" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            <NeumorphicInput v-model="passwordForm.nueva" type="password" label="Nueva Contraseña" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            <NeumorphicInput v-model="passwordForm.confirmar" type="password" label="Confirmar Nueva Contraseña" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            <NeumorphicButton @click="cambiarPassword" :disabled="passwordForm.processing">Actualizar Contraseña</NeumorphicButton>
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-4">
+            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Información del Perfil</h3>
+            <NeumorphicInput v-model="profileForm.email" type="email" label="Correo Electrónico" icon="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+            <p v-if="profileForm.errors.email" class="text-sm text-red-500 -mt-2">{{ profileForm.errors.email }}</p>
+            <NeumorphicInput v-model="profileForm.telefono" type="text" label="Teléfono" icon="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            <p v-if="profileForm.errors.telefono" class="text-sm text-red-500 -mt-2">{{ profileForm.errors.telefono }}</p>
+            <NeumorphicButton @click="actualizarPerfil" :disabled="profileForm.processing">Guardar Cambios</NeumorphicButton>
           </div>
 
-          <!-- Notificaciones Recibidas -->
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] space-y-4">
-            <h3 class="text-lg font-semibold text-gray-800">Notificaciones Recibidas</h3>
-            <div class="space-y-3">
-              <div
-                v-for="notif in notificaciones"
-                :key="notif.id"
-                class="flex items-start gap-3 rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]"
-              >
-                <div class="mt-1">
-                  <div
-                    class="h-2.5 w-2.5 rounded-full"
-                    :class="notif.estado === 'no_leido' ? 'bg-[var(--color-primary)]' : 'bg-gray-300'"
-                  ></div>
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm text-gray-800 truncate">{{ notif.mensaje }}</p>
-                  <p class="text-xs text-gray-500 mt-0.5">{{ notif.fecha }}</p>
-                </div>
-              </div>
-            </div>
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-4">
+            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Cambiar Contraseña</h3>
+            <NeumorphicInput v-model="passwordForm.actual" type="password" label="Contraseña Actual" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            <p v-if="passwordForm.errors.actual" class="text-sm text-red-500 -mt-2">{{ passwordForm.errors.actual }}</p>
+            <NeumorphicInput v-model="passwordForm.nueva" type="password" label="Nueva Contraseña" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            <NeumorphicInput v-model="passwordForm.confirmar" type="password" label="Confirmar Nueva Contraseña" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            <p v-if="passwordForm.errors.confirmar" class="text-sm text-red-500 -mt-2">{{ passwordForm.errors.confirmar }}</p>
+            <NeumorphicButton @click="cambiarPassword" :disabled="passwordForm.processing">Actualizar Contraseña</NeumorphicButton>
           </div>
         </div>
       </div>
