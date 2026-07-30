@@ -38,7 +38,7 @@ class LoginRequest extends FormRequest
         }
 
         if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
-            if ($user) {
+            if ($user && $user->rol !== 'admin') {
                 $user->increment('intentos_fallidos');
                 if ($user->intentos_fallidos >= 3) {
                     $user->update([
