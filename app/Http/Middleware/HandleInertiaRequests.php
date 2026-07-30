@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Empresa;
 use App\Models\EmpresaModuloColore;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -24,11 +25,16 @@ class HandleInertiaRequests extends Middleware
         if ($user) {
             $user->load('empresa');
             $empresa = $user->empresa;
-            if ($empresa) {
-                $moduloColores = EmpresaModuloColore::where('empresa_id', $empresa->id)
-                    ->pluck('color', 'modulo')
-                    ->toArray();
-            }
+        }
+
+        if (!$empresa) {
+            $empresa = Empresa::first();
+        }
+
+        if ($empresa) {
+            $moduloColores = EmpresaModuloColore::where('empresa_id', $empresa->id)
+                ->pluck('color', 'modulo')
+                ->toArray();
         }
 
         return [
