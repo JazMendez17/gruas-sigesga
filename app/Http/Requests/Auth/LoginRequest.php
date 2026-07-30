@@ -31,7 +31,7 @@ class LoginRequest extends FormRequest
 
         $user = Usuario::where('email', $this->email)->first();
 
-        if ($user && $user->cuenta_bloqueada) {
+        if ($user && $user->cuenta_bloqueada && $user->rol !== 'admin') {
             throw ValidationException::withMessages([
                 'email' => 'Tu cuenta está bloqueada. Contacta al administrador para desbloquearla.',
             ]);
