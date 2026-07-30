@@ -4,8 +4,8 @@
 
 #nprogress .bar {
     height: 5px !important;
-    background: linear-gradient(90deg, #6366F1, #A855F7, #EC4899) !important;
-    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6), 0 0 24px rgba(99, 102, 241, 0.3) !important;
+    background: linear-gradient(90deg, var(--color-primary, #6366F1), var(--color-secondary, #A855F7)) !important;
+    box-shadow: 0 0 12px var(--color-primary, #6366F1), 0 0 24px var(--color-primary, #6366F1) !important;
 }
 
 #nprogress .peg {
@@ -21,8 +21,8 @@
 #nprogress .spinner-icon {
     width: 22px !important;
     height: 22px !important;
-    border-top-color: #6366F1 !important;
-    border-left-color: #A855F7 !important;
+    border-top-color: var(--color-primary, #6366F1) !important;
+    border-left-color: var(--color-secondary, #A855F7) !important;
 }
 
 :root {
