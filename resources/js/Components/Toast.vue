@@ -1,0 +1,74 @@
+<script setup>
+import { ref, watch } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+const page = usePage()
+const visible = ref(false)
+const message = ref('')
+const type = ref('success')
+let timer = null
+
+function getLabel() {
+  const msg = message.value.toLowerCase()
+  if (msg.includes('error') || msg.includes('err')) return 'Error'
+  if (msg.includes('elimin') || msg.includes('borr')) return 'Eliminado'
+  if (msg.includes('actualiz') || msg.includes('modific')) return 'Actualizado'
+  if (msg.includes('cre') || msg.includes('registr')) return 'Creado'
+  if (msg.includes('guard') || msg.includes('correctament')) return 'Guardado'
+  if (msg.includes('sub') || msg.includes('carg')) return 'Subido'
+  return 'Correcto'
+}
+
+function getIcon() {
+  if (message.value.toLowerCase().includes('error')) return 'error'
+  return 'success'
+}
+
+watch(() => page.props.flash, (flash) => {
+  if (timer) clearTimeout(timer)
+  const msg = flash?.success || flash?.error || ''
+  if (!msg) return
+  message.value = msg
+  type.value = flash?.error ? 'error' : 'success'
+  visible.value = true
+  timer = setTimeout(() => { visible.value = false }, 4000)
+}, { deep: true })
+</script>
+
+<template>
+  <Teleport to="body">
+    <Transition
+      enter-active-class="transition-all duration-300 ease-out"
+      enter-from-class="opacity-0 scale-90 translate-y-4"
+      enter-to-class="opacity-100 scale-100 translate-y-0"
+      leave-active-class="transition-all duration-200 ease-in"
+      leave-from-class="opacity-100 scale-100"
+      leave-to-class="opacity-0 scale-90"
+    >
+      <div
+        v-if="visible"
+        class="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none"
+      >
+        <div
+          class="pointer-events-auto max-w-sm w-full mx-4 rounded-3xl p-6 shadow-[12px_12px_24px_var(--neumorphic-dark,#b0b5ba),-12px_-12px_24px_var(--neumorphic-light,#ffffff)] text-center"
+          :class="type === 'error' ? 'bg-red-50' : 'bg-[var(--color-surface,#EEF2F7)]'"
+        >
+          <div
+            class="w-14 h-14 mx-auto mb-3 rounded-2xl flex items-center justify-center"
+            :class="type === 'error' ? 'bg-red-100' : ''"
+            :style="type !== 'error' ? { backgroundColor: 'var(--color-primary)' } : {}"
+          >
+            <svg v-if="type === 'error'" class="w-7 h-7 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            <svg v-else class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold" :class="type === 'error' ? 'text-red-800' : 'text-[var(--color-text,#1F2937)]'">{{ getLabel() }}</h3>
+          <p class="text-sm mt-1 opacity-70" :class="type === 'error' ? 'text-red-600' : 'text-[var(--color-text,#1F2937)]'">{{ message }}</p>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
+</template>

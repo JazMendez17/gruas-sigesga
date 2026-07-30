@@ -3,6 +3,7 @@ import { ref, provide } from 'vue'
 import { useTheme } from '@/Composables/useTheme'
 import Sidebar from '@/Components/Sidebar.vue'
 import Navbar from '@/Components/Navbar.vue'
+import Toast from '@/Components/Toast.vue'
 
 useTheme()
 
@@ -26,6 +27,7 @@ provide('toggleSidebar', toggleSidebar)
 
     <Sidebar />
     <Navbar />
+    <Toast />
 
     <main class="min-h-screen pt-16 transition-all duration-300 lg:pl-64">
       <div class="p-4 sm:p-6 lg:p-8">
