@@ -2,14 +2,17 @@
 import { ref } from 'vue'
 import { router, useForm, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
-import NeumorphicButton from '@/Components/NeumorphicButton.vue'
-import NeumorphicInput from '@/Components/NeumorphicInput.vue'
 
 const page = usePage()
 const usuario = page.props.usuario
+const empleado = page.props.empleado || null
+const cliente = page.props.cliente || null
 
-const profileForm = useForm({
-  email: usuario.email,
+const editingTelefono = ref(false)
+const editingPassword = ref(false)
+const uploading = ref(false)
+
+const telefonoForm = useForm({
   telefono: usuario.telefono || '',
 })
 
@@ -19,12 +22,12 @@ const passwordForm = useForm({
   confirmar: '',
 })
 
-const uploading = ref(false)
-
-function actualizarPerfil() {
-  profileForm.put(route('panel.mi-perfil.update'), {
+function actualizarTelefono() {
+  telefonoForm.put(route('panel.mi-perfil.telefono'), {
     preserveScroll: true,
-    onSuccess: () => {},
+    onSuccess: () => {
+      editingTelefono.value = false
+    },
   })
 }
 
@@ -37,6 +40,7 @@ function cambiarPassword() {
     preserveScroll: true,
     onSuccess: () => {
       passwordForm.reset()
+      editingPassword.value = false
     },
   })
 }
@@ -62,6 +66,8 @@ const rolLabel = {
   operador: 'Operador',
   cliente: 'Cliente',
 }
+
+const perfilData = empleado || cliente || null
 </script>
 
 <template>
@@ -105,27 +111,141 @@ const rolLabel = {
               <span class="text-sm opacity-60" style="color: var(--color-text)">Empresa</span>
               <span class="text-sm font-medium text-right max-w-[180px]" style="color: var(--color-text)">{{ usuario.empresa }}</span>
             </div>
+            <div v-if="empleado?.puesto" class="flex justify-between">
+              <span class="text-sm opacity-60" style="color: var(--color-text)">Puesto</span>
+              <span class="text-sm font-medium" style="color: var(--color-text)">{{ empleado.puesto }}</span>
+            </div>
           </div>
         </div>
 
         <div class="space-y-6 lg:col-span-2">
-          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-4">
-            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Información del Perfil</h3>
-            <NeumorphicInput v-model="profileForm.email" type="email" label="Correo Electrónico" icon="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-            <p v-if="profileForm.errors.email" class="text-sm text-red-500 -mt-2">{{ profileForm.errors.email }}</p>
-            <NeumorphicInput v-model="profileForm.telefono" type="text" label="Teléfono" icon="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            <p v-if="profileForm.errors.telefono" class="text-sm text-red-500 -mt-2">{{ profileForm.errors.telefono }}</p>
-            <NeumorphicButton @click="actualizarPerfil" :disabled="profileForm.processing">Guardar Cambios</NeumorphicButton>
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-5">
+            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Datos del Perfil</h3>
+
+            <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Correo Electrónico</p>
+                  <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ usuario.email }}</p>
+                </div>
+                <span class="text-xs px-2 py-1 rounded-lg bg-gray-200/50 text-gray-500">No editable</span>
+              </div>
+            </div>
+
+            <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+              <div v-if="!editingTelefono" class="flex items-center justify-between">
+                <div>
+                  <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Teléfono</p>
+                  <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ usuario.telefono || 'Sin registrar' }}</p>
+                </div>
+                <button @click="editingTelefono = true" class="text-sm font-medium px-4 py-1.5 rounded-xl text-white transition-all" :style="{ backgroundColor: 'var(--color-primary)' }">
+                  Actualizar
+                </button>
+              </div>
+              <div v-else>
+                <p class="text-xs opacity-60 uppercase tracking-wider mb-2" style="color: var(--color-text)">Teléfono</p>
+                <div class="flex items-center gap-2">
+                  <input v-model="telefonoForm.telefono" type="text" class="flex-1 px-4 py-2 rounded-xl text-sm shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none" style="background-color: var(--color-bg); color: var(--color-text)" placeholder="Nuevo teléfono" />
+                  <button @click="actualizarTelefono" :disabled="telefonoForm.processing" class="text-sm font-medium px-4 py-2 rounded-xl text-white transition-all disabled:opacity-50" :style="{ backgroundColor: 'var(--color-primary)' }">
+                    <span v-if="telefonoForm.processing" class="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin mr-1 align-middle"></span>
+                    Guardar
+                  </button>
+                  <button @click="editingTelefono = false; telefonoForm.telefono = usuario.telefono || ''" class="text-sm px-4 py-2 rounded-xl shadow-[3px_3px_6px_var(--neumorphic-dark),-3px_-3px_6px_var(--neumorphic-light)]" style="color: var(--color-text)">
+                    Cancelar
+                  </button>
+                </div>
+                <p v-if="telefonoForm.errors.telefono" class="text-sm text-red-500 mt-1">{{ telefonoForm.errors.telefono }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="perfilData" class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-4">
+            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Datos Registrados</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Nombre Completo</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.nombre_completo || '---' }}</p>
+              </div>
+              <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Sexo</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.sexo === 'M' ? 'Masculino' : perfilData.sexo === 'F' ? 'Femenino' : '---' }}</p>
+              </div>
+              <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">CURP</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.curp || '---' }}</p>
+              </div>
+              <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Fecha de Nacimiento</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.fecha_nacimiento || '---' }}</p>
+              </div>
+              <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Nacionalidad</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.nacionalidad || '---' }}</p>
+              </div>
+              <div class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Folio INE</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.folio_ine || '---' }}</p>
+              </div>
+              <div v-if="cliente" class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Tipo de Cliente</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ cliente.tipo_cliente }}</p>
+              </div>
+              <div v-if="cliente?.numero_poliza" class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Número de Póliza</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ cliente.numero_poliza }}</p>
+              </div>
+              <div v-if="cliente?.tipo_cobertura_poliza" class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Cobertura</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ cliente.tipo_cobertura_poliza }}</p>
+              </div>
+              <div v-if="cliente?.aseguradora" class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Aseguradora</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ cliente.aseguradora }}</p>
+              </div>
+              <div v-if="perfilData.direccion" class="rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)] md:col-span-2" style="background-color: var(--color-bg)">
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Dirección</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">{{ perfilData.direccion }}</p>
+              </div>
+            </div>
           </div>
 
           <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-4">
-            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Cambiar Contraseña</h3>
-            <NeumorphicInput v-model="passwordForm.actual" type="password" label="Contraseña Actual" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            <p v-if="passwordForm.errors.actual" class="text-sm text-red-500 -mt-2">{{ passwordForm.errors.actual }}</p>
-            <NeumorphicInput v-model="passwordForm.nueva" type="password" label="Nueva Contraseña" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            <NeumorphicInput v-model="passwordForm.confirmar" type="password" label="Confirmar Nueva Contraseña" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-            <p v-if="passwordForm.errors.confirmar" class="text-sm text-red-500 -mt-2">{{ passwordForm.errors.confirmar }}</p>
-            <NeumorphicButton @click="cambiarPassword" :disabled="passwordForm.processing">Actualizar Contraseña</NeumorphicButton>
+            <h3 class="text-lg font-semibold" style="color: var(--color-text)">Contraseña</h3>
+
+            <div v-if="!editingPassword" class="flex items-center justify-between rounded-2xl p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]" style="background-color: var(--color-bg)">
+              <div>
+                <p class="text-xs opacity-60 uppercase tracking-wider" style="color: var(--color-text)">Contraseña</p>
+                <p class="text-sm font-medium mt-0.5" style="color: var(--color-text)">••••••••</p>
+              </div>
+              <button @click="editingPassword = true" class="text-sm font-medium px-4 py-1.5 rounded-xl text-white transition-all" :style="{ backgroundColor: 'var(--color-primary)' }">
+                Actualizar
+              </button>
+            </div>
+            <div v-else class="space-y-3">
+              <div>
+                <label class="text-xs opacity-60 uppercase tracking-wider mb-1.5 block" style="color: var(--color-text)">Contraseña Actual</label>
+                <input v-model="passwordForm.actual" type="password" class="w-full px-4 py-2.5 rounded-xl text-sm shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none" style="background-color: var(--color-bg); color: var(--color-text)" placeholder="••••••••" />
+                <p v-if="passwordForm.errors.actual" class="text-sm text-red-500 mt-1">{{ passwordForm.errors.actual }}</p>
+              </div>
+              <div>
+                <label class="text-xs opacity-60 uppercase tracking-wider mb-1.5 block" style="color: var(--color-text)">Nueva Contraseña</label>
+                <input v-model="passwordForm.nueva" type="password" class="w-full px-4 py-2.5 rounded-xl text-sm shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none" style="background-color: var(--color-bg); color: var(--color-text)" placeholder="Nueva contraseña" />
+              </div>
+              <div>
+                <label class="text-xs opacity-60 uppercase tracking-wider mb-1.5 block" style="color: var(--color-text)">Confirmar Nueva Contraseña</label>
+                <input v-model="passwordForm.confirmar" type="password" class="w-full px-4 py-2.5 rounded-xl text-sm shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none" style="background-color: var(--color-bg); color: var(--color-text)" placeholder="Confirmar contraseña" />
+                <p v-if="passwordForm.errors.confirmar" class="text-sm text-red-500 mt-1">{{ passwordForm.errors.confirmar }}</p>
+              </div>
+              <div class="flex items-center gap-2 pt-1">
+                <button @click="cambiarPassword" :disabled="passwordForm.processing" class="text-sm font-medium px-5 py-2 rounded-xl text-white transition-all disabled:opacity-50" :style="{ backgroundColor: 'var(--color-primary)' }">
+                  <span v-if="passwordForm.processing" class="inline-block w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin mr-1 align-middle"></span>
+                  Guardar Contraseña
+                </button>
+                <button @click="editingPassword = false; passwordForm.reset()" class="text-sm px-5 py-2 rounded-xl shadow-[3px_3px_6px_var(--neumorphic-dark),-3px_-3px_6px_var(--neumorphic-light)]" style="color: var(--color-text)">
+                  Cancelar
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
