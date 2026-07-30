@@ -8,37 +8,14 @@ import Badge from '@/Components/Badge.vue'
 import NeumorphicButton from '@/Components/NeumorphicButton.vue'
 
 defineProps({
-  role: { type: String, default: 'admin' }
+  role: { type: String, default: 'admin' },
+  kpis: { type: Array, default: () => [] },
+  recentActivity: { type: Array, default: () => [] },
+  serviciosHoy: { type: Array, default: () => [] },
+  historialCliente: { type: Array, default: () => [] },
 })
 
 const disponible = ref(true)
-
-const kpis = [
-  { title: 'Cotizaciones Pendientes', value: '12', icon: 'clipboard', color: '#4F46E5' },
-  { title: 'Servicios Activos', value: '8', icon: 'truck', color: '#059669' },
-  { title: 'Operadores Disponibles', value: '5', icon: 'users', color: '#D97706' },
-  { title: 'Ingresos del Mes', value: '$45,230', icon: 'dollar', color: '#7C3AED' },
-]
-
-const recentActivity = [
-  { id: 1, type: 'cotizacion', title: 'Cotización #00124', description: 'Juan Pérez — Transporte Local', time: 'Hace 5 min', status: 'pendiente' },
-  { id: 2, type: 'servicio', title: 'Servicio #0089', description: 'María García — Carga Refrigerada', time: 'Hace 18 min', status: 'en_curso' },
-  { id: 3, type: 'cotizacion', title: 'Cotización #00123', description: 'Carlos López — Mudanza Residencial', time: 'Hace 42 min', status: 'aprobada' },
-  { id: 4, type: 'servicio', title: 'Servicio #0088', description: 'Ana Martínez — Entrega Express', time: 'Hace 1 h', status: 'finalizado' },
-  { id: 5, type: 'cotizacion', title: 'Cotización #00122', description: 'Roberto Díaz — Transporte de Maquinaria', time: 'Hace 2 h', status: 'rechazada' },
-]
-
-const serviciosHoy = [
-  { id: 1, cliente: 'María García', ruta: 'Zona Industrial — Centro', horario: '09:00 - 11:00', status: 'asignado' },
-  { id: 2, cliente: 'Carlos López', ruta: 'Norte — Aeropuerto', horario: '12:00 - 14:00', status: 'en_curso' },
-  { id: 3, cliente: 'Ana Martínez', ruta: 'Sur — Parque Industrial', horario: '15:00 - 17:00', status: 'asignado' },
-]
-
-const historialCliente = [
-  { id: 1, servicio: 'Transporte Local', fecha: '15 Jul 2026', status: 'finalizado', monto: '$1,200' },
-  { id: 2, servicio: 'Carga Refrigerada', fecha: '10 Jul 2026', status: 'finalizado', monto: '$3,800' },
-  { id: 3, servicio: 'Mudanza Residencial', fecha: '28 Jun 2026', status: 'cancelado', monto: '$5,500' },
-]
 
 const statusColors = {
   pendiente: 'bg-yellow-100 text-yellow-800',
@@ -46,7 +23,7 @@ const statusColors = {
   rechazada: 'bg-red-100 text-red-800',
   en_curso: 'bg-blue-100 text-blue-800',
   finalizado: 'bg-green-100 text-green-800',
-  asignado: 'bg-indigo-100 text-indigo-800',
+  asignado: 'bg-[var(--color-primary-light)] text-[var(--color-primary)]',
   cancelado: 'bg-gray-100 text-gray-800',
 }
 </script>
@@ -78,38 +55,38 @@ const statusColors = {
 
         <!-- Charts Section -->
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] lg:col-span-2">
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] lg:col-span-2">
             <h3 class="mb-4 text-lg font-semibold text-gray-700">Servicios por Día</h3>
             <div class="flex items-end justify-between gap-2" style="height: 180px">
               <div v-for="(bar, i) in [{day:'Lun',h:60},{day:'Mar',h:45},{day:'Mié',h:80},{day:'Jue',h:55},{day:'Vie',h:90},{day:'Sáb',h:40},{day:'Dom',h:20}]" :key="i" class="flex flex-1 flex-col items-center gap-2">
-                <div class="w-full rounded-lg transition-all duration-500" :style="{ height: bar.h + '%', background: 'linear-gradient(180deg, #4F46E5, #7C3AED)' }"></div>
+                <div class="w-full rounded-lg transition-all duration-500" :style="{ height: bar.h + '%', background: 'linear-gradient(180deg, var(--color-primary), var(--color-secondary))' }"></div>
                 <span class="text-xs font-medium text-gray-500">{{ bar.day }}</span>
               </div>
             </div>
           </div>
 
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
             <h3 class="mb-4 text-lg font-semibold text-gray-700">Estadísticas</h3>
             <div class="flex flex-col items-center justify-center" style="height: 180px">
-              <ProgressDonut :percentage="73" :color="'#4F46E5'" :size="140" />
+              <ProgressDonut :percentage="73" :color="'var(--color-primary)'" :size="140" />
               <p class="mt-3 text-sm text-gray-500">Eficiencia General</p>
             </div>
           </div>
         </div>
 
         <!-- Recent Activity -->
-        <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+        <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
           <h3 class="mb-4 text-lg font-semibold text-gray-700">Actividad Reciente</h3>
           <div class="space-y-3">
             <div
               v-for="item in recentActivity"
               :key="item.id"
               @click="router.visit(route(item.type === 'cotizacion' ? 'panel.cotizaciones.show' : 'panel.servicios.show', { id: item.id }))"
-              class="flex cursor-pointer items-center justify-between rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff]"
+              class="flex cursor-pointer items-center justify-between rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_6px_6px_12px_var(--neumorphic-dark),inset_-6px_-6px_12px_var(--neumorphic-light)]"
             >
               <div class="flex items-center gap-4">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF2F7] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]">
-                  <svg v-if="item.type === 'cotizacion'" class="h-5 w-5 text-[#4F46E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-surface)] shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)]">
+                  <svg v-if="item.type === 'cotizacion'" class="h-5 w-5 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
                   <svg v-else class="h-5 w-5 text-[#059669]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2-1 2 1 2-1 2 1 2-1 2 1z" /></svg>
                 </div>
                 <div>
@@ -130,17 +107,17 @@ const statusColors = {
       <template v-if="role === 'operador'">
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <!-- Mis Servicios Hoy -->
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] lg:col-span-2">
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] lg:col-span-2">
             <h3 class="mb-4 text-lg font-semibold text-gray-700">Mis Servicios Hoy</h3>
             <div class="space-y-3">
               <div
                 v-for="sv in serviciosHoy"
                 :key="sv.id"
-                class="flex items-center justify-between rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]"
+                class="flex items-center justify-between rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]"
               >
                 <div class="flex items-center gap-4">
-                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF2F7] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]">
-                    <svg class="h-5 w-5 text-[#4F46E5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-surface)] shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)]">
+                    <svg class="h-5 w-5 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                   </div>
                   <div>
                     <p class="text-sm font-semibold text-gray-800">{{ sv.cliente }}</p>
@@ -157,9 +134,9 @@ const statusColors = {
 
           <!-- Siguiente Servicio + Disponibilidad -->
           <div class="space-y-6">
-            <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+            <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
               <h3 class="mb-4 text-lg font-semibold text-gray-700">Siguiente Servicio</h3>
-              <div class="rounded-2xl bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] p-5 text-white shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+              <div class="rounded-2xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-secondary)] p-5 text-white shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
                 <p class="text-sm font-medium opacity-80">Próximo destino</p>
                 <p class="mt-1 text-lg font-bold">Zona Industrial</p>
                 <p class="mt-2 text-sm opacity-80">Cliente: María García</p>
@@ -171,12 +148,12 @@ const statusColors = {
               </div>
             </div>
 
-            <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+            <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
               <h3 class="mb-4 text-lg font-semibold text-gray-700">Disponibilidad</h3>
               <button
                 @click="disponible = !disponible"
                 class="flex w-full items-center justify-between rounded-2xl p-4 transition-all duration-300"
-                :class="disponible ? 'bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]' : 'bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]'"
+                :class="disponible ? 'bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]' : 'bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]'"
               >
                 <div class="flex items-center gap-3">
                   <div
@@ -196,9 +173,9 @@ const statusColors = {
       <template v-if="role === 'cliente'">
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <!-- Mi Solicitud Activa -->
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] lg:col-span-1">
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] lg:col-span-1">
             <h3 class="mb-4 text-lg font-semibold text-gray-700">Mi Solicitud Activa</h3>
-            <div class="rounded-2xl bg-gradient-to-br from-[#D97706] to-[#F59E0B] p-5 text-white shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+            <div class="rounded-2xl bg-gradient-to-br from-[#D97706] to-[#F59E0B] p-5 text-white shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]">
               <div class="flex items-center justify-between">
                 <span class="text-sm font-medium opacity-80">Servicio #0089</span>
                 <Badge variant="en_curso">En Curso</Badge>
@@ -216,16 +193,16 @@ const statusColors = {
           </div>
 
           <!-- Historial Reciente -->
-          <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] lg:col-span-2">
+          <div class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] lg:col-span-2">
             <h3 class="mb-4 text-lg font-semibold text-gray-700">Historial Reciente</h3>
             <div class="space-y-3">
               <div
                 v-for="item in historialCliente"
                 :key="item.id"
-                class="flex items-center justify-between rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]"
+                class="flex items-center justify-between rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]"
               >
                 <div class="flex items-center gap-4">
-                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EEF2F7] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]">
+                  <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-surface)] shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)]">
                     <svg class="h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                   </div>
                   <div>

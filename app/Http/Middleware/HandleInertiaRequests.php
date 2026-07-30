@@ -47,6 +47,7 @@ class HandleInertiaRequests extends Middleware
                     'rol' => $user->rol,
                     'empresa_id' => $user->empresa_id,
                     'empleado_id' => $user->empleado_id,
+                    'foto' => $user->foto,
                 ] : null,
             ],
             'empresa' => $empresa ? [

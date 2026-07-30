@@ -13,11 +13,13 @@ class UnidadMantenimiento extends Model
 
     protected $fillable = [
         'unidad_id',
-        'fecha',
         'tipo',
-        'descripcion',
+        'fecha',
+        'kilometraje',
         'costo',
-        'proveedor',
+        'proximo_mantenimiento_fecha',
+        'proximo_mantenimiento_km',
+        'observaciones',
     ];
 
     public function unidad()

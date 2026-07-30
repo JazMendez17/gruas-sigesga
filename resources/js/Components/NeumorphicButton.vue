@@ -29,9 +29,9 @@ const variantStyle = computed(() => {
 })
 
 const variantClass = computed(() => {
-  if (props.variant === 'secondary') return 'neumorphic-raised text-[#4B5563]'
+  if (props.variant === 'secondary') return 'neumorphic-raised text-[var(--color-text)]'
   if (props.variant === 'danger') return 'bg-gradient-to-br from-red-500 to-rose-600 text-white shadow-lg shadow-red-200'
-  if (props.variant === 'ghost') return 'text-[#4B5563] hover:neumorphic-raised'
+  if (props.variant === 'ghost') return 'text-[var(--color-text)] hover:neumorphic-raised'
   return ''
 })
 </script>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\Cliente;
 use App\Models\Empleado;
+use App\Http\Requests\Panel\UpdatePasswordRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -82,7 +83,7 @@ class PerfilController extends Controller
     public function updateTelefono(Request $request)
     {
         $validated = $request->validate([
-            'telefono' => 'required|string|max:20',
+            'telefono' => 'required|string|max:20|regex:/^[\d\s\-\(\)\+]+$/',
         ]);
 
         auth()->user()->update($validated);
@@ -90,13 +91,8 @@ class PerfilController extends Controller
         return back()->with('success', 'Teléfono actualizado correctamente');
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePasswordRequest $request)
     {
-        $request->validate([
-            'actual' => 'required|string',
-            'nueva' => 'required|string|min:6',
-        ]);
-
         $user = auth()->user();
 
         if (!Hash::check($request->actual, $user->password)) {
@@ -113,18 +109,30 @@ class PerfilController extends Controller
     public function updateFoto(Request $request)
     {
         $request->validate([
-            'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $user = auth()->user();
-        $path = $request->file('foto')->store('fotos', 'public');
 
         if ($user->foto) {
             Storage::disk('public')->delete($user->foto);
         }
 
+        $path = $request->file('foto')->store('fotos', 'public');
         $user->update(['foto' => $path]);
 
         return back()->with('success', 'Foto de perfil actualizada correctamente');
+    }
+
+    public function destroyFoto()
+    {
+        $user = auth()->user();
+
+        if ($user->foto) {
+            Storage::disk('public')->delete($user->foto);
+            $user->update(['foto' => null]);
+        }
+
+        return back()->with('success', 'Foto de perfil eliminada correctamente');
     }
 }

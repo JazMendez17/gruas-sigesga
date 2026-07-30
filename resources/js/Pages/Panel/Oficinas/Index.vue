@@ -1,55 +1,26 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
 import NeumorphicButton from '@/Components/NeumorphicButton.vue'
 import NeumorphicInput from '@/Components/NeumorphicInput.vue'
 
 const busqueda = ref('')
 
-const oficinas = [
-  {
-    nombre: 'Oficina Central',
-    direccion: 'Av. Reforma #250, Col. Juárez',
-    telefono: '555-100-2000',
-    email: 'central@sigesga.com',
-    encargado: 'Lic. Roberto Méndez',
-  },
-  {
-    nombre: 'Sucursal Norte',
-    direccion: 'Blvd. Norte #1500, Col. Industrial',
-    telefono: '555-100-2001',
-    email: 'norte@sigesga.com',
-    encargado: 'Ing. María Torres',
-  },
-  {
-    nombre: 'Sucursal Sur',
-    direccion: 'Av. Sur #890, Col. Del Valle',
-    telefono: '555-100-2002',
-    email: 'sur@sigesga.com',
-    encargado: 'C.P. Carlos Ruiz',
-  },
-  {
-    nombre: 'Sucursal Aeropuerto',
-    direccion: 'Terminal de Carga #45, AICM',
-    telefono: '555-100-2003',
-    email: 'aeropuerto@sigesga.com',
-    encargado: 'Sra. Laura Díaz',
-  },
-  {
-    nombre: 'Sucursal Poniente',
-    direccion: 'Av. Constituyentes #500, Col. Lomas',
-    telefono: '555-100-2004',
-    email: 'poniente@sigesga.com',
-    encargado: 'Sr. Pedro Infante',
-  },
-]
+const page = usePage()
+const oficinas = computed(() => page.props.oficinas || [])
 
 const filtradas = computed(() => {
-  if (!busqueda.value) return oficinas
+  if (!busqueda.value) return oficinas.value
   const q = busqueda.value.toLowerCase()
-  return oficinas.filter(o => o.nombre.toLowerCase().includes(q) || o.direccion.toLowerCase().includes(q) || o.encargado.toLowerCase().includes(q))
+  return oficinas.value.filter(o => o.nombre?.toLowerCase().includes(q) || o.direccion?.toLowerCase().includes(q) || o.encargado?.toLowerCase().includes(q))
 })
+
+function eliminarOficina(id) {
+  if (confirm('¿Eliminar esta oficina?')) {
+    router.delete(route('panel.oficinas.destroy', { id }))
+  }
+}
 </script>
 
 <template>
@@ -57,7 +28,7 @@ const filtradas = computed(() => {
     <div class="space-y-6">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 class="text-2xl font-bold text-gray-800">Oficinas / Sucursales</h1>
-        <NeumorphicButton @click="alert('Formulario: Nueva Oficina')">
+        <NeumorphicButton @click="router.visit(route('panel.oficinas.create'))">
           + Nueva Oficina
         </NeumorphicButton>
       </div>
@@ -74,7 +45,7 @@ const filtradas = computed(() => {
       <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <div
           v-for="ofi in filtradas"
-          :key="ofi.nombre"
+          :key="ofi.id"
           class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all hover:shadow-[6px_6px_12px_#d0d5da,-6px_-6px_12px_#ffffff]"
         >
           <div class="flex items-center gap-3 mb-4">
@@ -102,10 +73,10 @@ const filtradas = computed(() => {
             </div>
           </div>
           <div class="mt-4 flex justify-end gap-2">
-            <button @click="router.visit(route('oficinas.show', ofi.nombre))" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-[#4F46E5]">
+            <button @click="router.visit(route('panel.oficinas.show', { id: ofi.id }))" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-[#4F46E5]">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
             </button>
-            <button @click="router.visit(route('oficinas.edit', ofi.nombre))" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-[#059669]">
+            <button @click="router.visit(route('panel.oficinas.edit', { id: ofi.id }))" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-[#059669]">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
             </button>
           </div>

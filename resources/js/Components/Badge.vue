@@ -4,12 +4,14 @@ const props = defineProps({
   size: { type: String, default: 'sm' },
 })
 
+const sd = 'shadow-[2px_2px_4px_var(--neumorphic-dark),-2px_-2px_4px_var(--neumorphic-light)]'
+
 const variants = {
-  success: 'bg-green-100 text-green-700 shadow-[2px_2px_4px_#b0d0b6,-2px_-2px_4px_#ffffff]',
-  warning: 'bg-amber-100 text-amber-700 shadow-[2px_2px_4px_#d4b88a,-2px_-2px_4px_#ffffff]',
-  danger: 'bg-red-100 text-red-700 shadow-[2px_2px_4px_#d4a0a0,-2px_-2px_4px_#ffffff]',
-  info: 'bg-blue-100 text-blue-700 shadow-[2px_2px_4px_#a0b8d4,-2px_-2px_4px_#ffffff]',
-  neutral: 'bg-gray-100 text-gray-700 shadow-[2px_2px_4px_#c0c4c8,-2px_-2px_4px_#ffffff]',
+  success: `bg-green-100 text-green-700 ${sd}`,
+  warning: `bg-amber-100 text-amber-700 ${sd}`,
+  danger: `bg-red-100 text-red-700 ${sd}`,
+  info: `bg-[var(--color-secondary-light)] text-[var(--color-secondary)] ${sd}`,
+  neutral: `bg-gray-100 text-gray-700 ${sd}`,
 }
 
 const sizes = {

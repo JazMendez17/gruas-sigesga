@@ -14,7 +14,7 @@ class EmpresaAccesosRapido extends Model
     protected $fillable = [
         'empresa_id',
         'titulo',
-        'url',
+        'link',
         'icono',
         'orden',
     ];

@@ -14,9 +14,8 @@ class CatalogoServicio extends Model
     protected $fillable = [
         'empresa_id',
         'nombre',
-        'descripcion',
-        'precio',
-        'duracion',
+        'requiere_maniobra',
+        'activo',
     ];
 
     public function empresa()
@@ -26,16 +25,16 @@ class CatalogoServicio extends Model
 
     public function convenios()
     {
-        return $this->hasMany(Convenio::class, 'catalogo_servicio_id');
+        return $this->hasMany(Convenio::class, 'tipo_servicio_id');
     }
 
     public function tarifasEmpresa()
     {
-        return $this->hasMany(TarifasEmpresa::class, 'catalogo_servicio_id');
+        return $this->hasMany(TarifasEmpresa::class, 'tipo_servicio_id');
     }
 
     public function cotizaciones()
     {
-        return $this->hasMany(Cotizacione::class, 'catalogo_servicio_id');
+        return $this->hasMany(Cotizacione::class, 'tipo_servicio_id');
     }
 }

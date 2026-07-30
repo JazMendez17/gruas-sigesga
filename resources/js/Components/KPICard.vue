@@ -9,7 +9,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="neumorphic-raised rounded-3xl p-6 bg-[#EEF2F7]">
+  <div class="neumorphic-raised rounded-3xl p-6 bg-[var(--color-surface)] relative overflow-hidden">
+    <div class="absolute top-0 left-0 right-0 h-1" :style="{ backgroundColor: 'var(--color-secondary)' }"></div>
     <div class="flex items-start justify-between mb-4">
       <div class="w-12 h-12 rounded-2xl flex items-center justify-center" :style="{ backgroundColor: color + '20' }">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" :style="{ color }" stroke-width="1.5">
@@ -23,13 +24,13 @@ defineProps({
         <span class="font-medium">{{ trend.value }}</span>
       </div>
     </div>
-    <p class="text-3xl font-bold text-[#1F2937] mb-1">{{ value }}</p>
-    <p class="text-sm text-[#6B7280]">{{ title }}</p>
+    <p class="text-3xl font-bold text-[var(--color-text)] mb-1">{{ value }}</p>
+    <p class="text-sm text-[var(--color-text-muted)]">{{ title }}</p>
   </div>
 </template>
 
 <style scoped>
 .neumorphic-raised {
-  box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+  box-shadow: 8px 8px 16px var(--neumorphic-dark), -8px -8px 16px var(--neumorphic-light);
 }
 </style>

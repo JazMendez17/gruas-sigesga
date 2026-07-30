@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\Panel\UploadFileRequest;
 use Illuminate\Support\Facades\Storage;
 
 class UploadController extends Controller
 {
-    public function store(Request $request)
+    public function store(UploadFileRequest $request)
     {
-        $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
-            'type' => 'required|in:logo,imagen_fondo,servicio,foto',
-        ]);
-
         $directory = $request->type === 'foto' ? 'fotos' : 'empresa';
         $path = $request->file('file')->store($directory, 'public');
 

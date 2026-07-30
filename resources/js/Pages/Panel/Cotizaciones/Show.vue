@@ -49,7 +49,7 @@ import NeumorphicButton from '@/Components/NeumorphicButton.vue'
             </div>
             <div>
               <p class="text-xs text-gray-500 uppercase tracking-wider">Total Estimado</p>
-              <p class="text-xl font-bold text-indigo-600">$1,200</p>
+              <p class="text-xl font-bold text-[var(--color-primary)]">$1,200</p>
             </div>
           </div>
         </div>
@@ -72,8 +72,8 @@ import NeumorphicButton from '@/Components/NeumorphicButton.vue'
 
 <style scoped>
 .neumorphic-card {
-  background: #EEF2F7;
+  background: var(--color-surface);
   border-radius: 24px;
-  box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+  box-shadow: 8px 8px 16px var(--neumorphic-dark), -8px -8px 16px var(--neumorphic-light);
 }
 </style>

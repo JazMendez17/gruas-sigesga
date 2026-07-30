@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import { router, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
 import DataTable from '@/Components/DataTable.vue'
 import NeumorphicButton from '@/Components/NeumorphicButton.vue'
@@ -20,14 +20,8 @@ const columns = [
   { key: 'fecha', label: 'Fecha' },
 ]
 
-const facturas = [
-  { folio: 'FAC-00056', cliente: 'María García', servicio: 'Transporte Local', subtotal: '$1,034', iva: '$165', total: '$1,200', estatus: 'vigente', fecha: '23 Jul 2026' },
-  { folio: 'FAC-00055', cliente: 'Carlos López', servicio: 'Carga Refrigerada', subtotal: '$3,276', iva: '$524', total: '$3,800', estatus: 'vigente', fecha: '22 Jul 2026' },
-  { folio: 'FAC-00054', cliente: 'Ana Martínez', servicio: 'Entrega Express', subtotal: '$733', iva: '$117', total: '$850', estatus: 'cancelada', fecha: '21 Jul 2026' },
-  { folio: 'FAC-00053', cliente: 'Roberto Díaz', servicio: 'Transporte de Maquinaria', subtotal: '$10,345', iva: '$1,655', total: '$12,000', estatus: 'vigente', fecha: '20 Jul 2026' },
-  { folio: 'FAC-00052', cliente: 'Sofía Ramírez', servicio: 'Paquetería', subtotal: '$302', iva: '$48', total: '$350', estatus: 'cancelada', fecha: '19 Jul 2026' },
-  { folio: 'FAC-00051', cliente: 'Pedro Infante', servicio: 'Mudanza Comercial', subtotal: '$7,069', iva: '$1,131', total: '$8,200', estatus: 'vigente', fecha: '18 Jul 2026' },
-]
+const page = usePage()
+const facturas = computed(() => page.props.facturas || [])
 </script>
 
 <template>
@@ -35,7 +29,7 @@ const facturas = [
     <div class="space-y-6">
       <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 class="text-2xl font-bold text-gray-800">Facturación</h1>
-        <NeumorphicButton @click="alert('Funcionalidad: Generar Factura')">
+        <NeumorphicButton @click="router.visit(route('panel.facturacion.index'))">
           + Generar Factura
         </NeumorphicButton>
       </div>
@@ -53,6 +47,15 @@ const facturas = [
         <DataTable :columns="columns" :data="facturas">
           <template #cell-estatus="{ row }">
             <Badge :variant="row.estatus === 'vigente' ? 'success' : 'danger'">{{ row.estatus }}</Badge>
+          </template>
+          <template #cell-subtotal="{ row }">
+            ${{ row.subtotal?.toFixed(2) }}
+          </template>
+          <template #cell-iva="{ row }">
+            ${{ row.iva?.toFixed(2) }}
+          </template>
+          <template #cell-total="{ row }">
+            ${{ row.total?.toFixed(2) }}
           </template>
         </DataTable>
       </div>

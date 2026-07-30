@@ -16,10 +16,18 @@ class Empleado extends Model
         'oficina_id',
         'direccion_id',
         'nombre',
-        'apellido',
+        'apellido_paterno',
+        'apellido_materno',
+        'sexo',
+        'curp',
+        'fecha_nacimiento',
         'telefono',
-        'email',
+        'telefono_local',
+        'correo',
+        'folio_ine',
+        'nacionalidad',
         'puesto',
+        'sueldo_diario',
     ];
 
     public function empresa()

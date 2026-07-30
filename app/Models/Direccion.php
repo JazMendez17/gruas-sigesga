@@ -13,13 +13,15 @@ class Direccion extends Model
 
     protected $fillable = [
         'calle',
-        'numero',
+        'numero_exterior',
+        'numero_interior',
         'colonia',
         'codigo_postal',
+        'municipio_alcaldia',
         'ciudad',
         'estado',
         'pais',
-        'referencia',
+        'referencias',
     ];
 
     public function oficinas()

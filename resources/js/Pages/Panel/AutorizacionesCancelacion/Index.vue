@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
 import DataTable from '@/Components/DataTable.vue'
 import Badge from '@/Components/Badge.vue'
@@ -19,30 +19,30 @@ const columns = [
   { key: 'estatus', label: 'Estatus' },
 ]
 
-const autorizaciones = [
-  { folio_servicio: 'SVC-00089', solicitante: 'María García', motivo: 'Cliente solicita cancelación', tipo_incidencia: 'Cancelación Voluntaria', fecha: '23 Jul 2026', estatus: 'pendiente' },
-  { folio_servicio: 'SVC-00085', solicitante: 'Roberto Díaz', motivo: 'Falta de unidades disponibles', tipo_incidencia: 'Incapacidad Operativa', fecha: '22 Jul 2026', estatus: 'pendiente' },
-  { folio_servicio: 'SVC-00082', solicitante: 'Laura Torres', motivo: 'Cambio de domicilio', tipo_incidencia: 'Cancelación Voluntaria', fecha: '21 Jul 2026', estatus: 'aprobada' },
-  { folio_servicio: 'SVC-00078', solicitante: 'Pedro Infante', motivo: 'Servicio duplicado', tipo_incidencia: 'Error Administrativo', fecha: '20 Jul 2026', estatus: 'rechazada' },
-  { folio_servicio: 'SVC-00075', solicitante: 'Sofía Ramírez', motivo: 'Problemas con el cliente', tipo_incidencia: 'Incapacidad Operativa', fecha: '19 Jul 2026', estatus: 'aprobada' },
-  { folio_servicio: 'SVC-00072', solicitante: 'Carlos López', motivo: 'Condiciones climáticas', tipo_incidencia: 'Fuerza Mayor', fecha: '18 Jul 2026', estatus: 'rechazada' },
-]
-
-const filtroActivo = computed(() => tabActivo.value)
+const page = usePage()
+const autorizaciones = computed(() => page.props.autorizaciones || [])
 
 const filtradas = computed(() => {
   const statusMap = { pendientes: 'pendiente', aprobadas: 'aprobada', rechazadas: 'rechazada' }
-  let resultado = autorizaciones.filter(a => a.estatus === statusMap[tabActivo.value])
+  let resultado = autorizaciones.value.filter(a => a.estatus === statusMap[tabActivo.value])
   if (busqueda.value) {
     const q = busqueda.value.toLowerCase()
     resultado = resultado.filter(a =>
-      a.folio_servicio.toLowerCase().includes(q) ||
-      a.solicitante.toLowerCase().includes(q) ||
-      a.motivo.toLowerCase().includes(q)
+      a.folio_servicio?.toLowerCase().includes(q) ||
+      a.solicitante?.toLowerCase().includes(q) ||
+      a.motivo?.toLowerCase().includes(q)
     )
   }
   return resultado
 })
+
+function aprobar(id) {
+  router.post(route('panel.autorizaciones-cancelacion.aprobar', { id }))
+}
+
+function rechazar(id) {
+  router.post(route('panel.autorizaciones-cancelacion.rechazar', { id }))
+}
 </script>
 
 <template>
@@ -80,10 +80,10 @@ const filtradas = computed(() => {
           </template>
           <template #actions="{ row }">
             <div class="flex items-center gap-2">
-              <button @click="alert('Autorización aprobada: ' + row.folio_servicio)" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-[#059669]">
+              <button v-if="row.estatus === 'pendiente'" @click="aprobar(row.id)" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-[#059669]">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
               </button>
-              <button @click="alert('Autorización rechazada: ' + row.folio_servicio)" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-red-500">
+              <button v-if="row.estatus === 'pendiente'" @click="rechazar(row.id)" class="rounded-lg bg-[#EEF2F7] p-2 text-gray-500 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-red-500">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>

@@ -28,30 +28,30 @@ function sortIcon(key) {
 </script>
 
 <template>
-  <div class="neumorphic-raised rounded-3xl bg-[#EEF2F7] overflow-hidden">
+  <div class="neumorphic-raised rounded-3xl bg-[var(--color-surface)] overflow-hidden">
     <div class="overflow-x-auto">
       <table class="w-full">
         <thead>
-          <tr class="border-b border-[#d0d5da]/30">
+          <tr class="border-b border-[var(--neumorphic-dark)]/30">
             <th
               v-for="col in columns"
               :key="col.key"
               @click="col.sortable && toggleSort(col.key)"
-              :class="['px-4 py-3 text-left text-xs font-semibold text-[#6B7280] uppercase tracking-wider', col.sortable ? 'cursor-pointer hover:text-[#4B5563]' : '']"
+              :class="['px-4 py-3 text-left text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider', col.sortable ? 'cursor-pointer hover:text-[var(--color-text)]' : '']"
             >
               <div class="flex items-center gap-1">
                 <span>{{ col.label }}</span>
-                <svg v-if="col.sortable" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg v-if="col.sortable" class="w-3 h-3" :class="sortField === col.key ? 'text-[var(--color-secondary)]' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="sortIcon(col.key)" />
                 </svg>
               </div>
             </th>
-            <th v-if="$slots.actions" class="px-4 py-3 text-right text-xs font-semibold text-[#6B7280] uppercase tracking-wider">Acciones</th>
+            <th v-if="$slots.actions" class="px-4 py-3 text-right text-xs font-semibold text-[var(--color-text-muted)] uppercase tracking-wider">Acciones</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-[#d0d5da]/20">
+        <tbody class="divide-y divide-[var(--neumorphic-dark)]/20">
           <tr v-for="(row, i) in data" :key="i" @click="$emit('rowClick', row)" class="cursor-pointer hover:bg-white/30 transition-colors">
-            <td v-for="col in columns" :key="col.key" class="px-4 py-3 text-sm text-[#4B5563] whitespace-nowrap">
+            <td v-for="col in columns" :key="col.key" class="px-4 py-3 text-sm text-[var(--color-text)] whitespace-nowrap">
               <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]">
                 {{ row[col.key] }}
               </slot>
@@ -61,7 +61,7 @@ function sortIcon(key) {
             </td>
           </tr>
           <tr v-if="data.length === 0">
-            <td :colspan="columns.length + ($slots.actions ? 1 : 0)" class="px-4 py-12 text-center text-[#6B7280]">
+            <td :colspan="columns.length + ($slots.actions ? 1 : 0)" class="px-4 py-12 text-center text-[var(--color-text-muted)]">
               No hay datos disponibles
             </td>
           </tr>
@@ -69,8 +69,8 @@ function sortIcon(key) {
       </table>
     </div>
 
-    <div v-if="pagination" class="flex items-center justify-between px-4 py-3 border-t border-[#d0d5da]/30">
-      <p class="text-sm text-[#6B7280]">
+    <div v-if="pagination" class="flex items-center justify-between px-4 py-3 border-t border-[var(--neumorphic-dark)]/30">
+      <p class="text-sm text-[var(--color-text-muted)]">
         Mostrando {{ pagination.from || 0 }} - {{ pagination.to || 0 }} de {{ pagination.total || 0 }}
       </p>
       <div class="flex gap-2">
@@ -87,9 +87,9 @@ function sortIcon(key) {
 
 <style scoped>
 .neumorphic-raised {
-  box-shadow: 8px 8px 16px #d0d5da, -8px -8px 16px #ffffff;
+  box-shadow: 8px 8px 16px var(--neumorphic-dark), -8px -8px 16px var(--neumorphic-light);
 }
 .neumorphic-pressed {
-  box-shadow: inset 3px 3px 6px #d0d5da, inset -3px -3px 6px #ffffff;
+  box-shadow: inset 3px 3px 6px var(--neumorphic-dark), inset -3px -3px 6px var(--neumorphic-light);
 }
 </style>

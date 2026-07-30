@@ -17,6 +17,7 @@ class Oficina extends Model
         'nombre',
         'telefono',
         'email',
+        'encargado',
     ];
 
     public function empresa()

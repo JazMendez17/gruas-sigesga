@@ -152,7 +152,7 @@ const visibleGroups = computed(() => {
                     class="px-3 xl:px-4 h-full flex items-center text-sm font-medium relative transition-colors duration-200"
                     :class="isGroupActive(menuGroup) ? 'text-[var(--color-primary)]' : 'text-[var(--color-text)] opacity-75 hover:opacity-100'">
                 {{ menuGroup.title }}
-                <span class="absolute bottom-0 left-3 xl:left-4 right-3 xl:right-4 h-0.5 rounded-full bg-[var(--color-primary)] transition-transform duration-300 origin-left"
+                <span class="absolute bottom-0 left-3 xl:left-4 right-3 xl:right-4 h-0.5 rounded-full bg-[var(--color-secondary)] transition-transform duration-300 origin-left"
                       :class="isGroupActive(menuGroup) ? 'scale-x-100' : 'scale-x-0'"></span>
               </Link>
             </template>
@@ -163,7 +163,7 @@ const visibleGroups = computed(() => {
                 <svg class="w-3 h-3 transition-transform duration-200" :class="activeMega === menuGroup.title ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                 </svg>
-                <span class="absolute bottom-0 left-3 xl:left-4 right-3 xl:right-4 h-0.5 rounded-full bg-[var(--color-primary)] transition-transform duration-300 origin-left"
+                <span class="absolute bottom-0 left-3 xl:left-4 right-3 xl:right-4 h-0.5 rounded-full bg-[var(--color-secondary)] transition-transform duration-300 origin-left"
                       :class="isGroupActive(menuGroup) || activeMega === menuGroup.title ? 'scale-x-100' : 'scale-x-0'"></span>
               </button>
               <Transition name="mega">
@@ -177,7 +177,7 @@ const visibleGroups = computed(() => {
                           :href="route(item.route)"
                           class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
                           :class="isItemActive(item)
-                            ? 'neumorphic-pressed-sm text-[var(--color-primary)]'
+                            ? 'neumorphic-pressed-sm text-[var(--color-secondary)]'
                             : 'text-[var(--color-text)] hover:bg-[var(--color-bg)] hover:translate-x-0.5'">
                       <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round" :d="item.icon" />
@@ -195,7 +195,10 @@ const visibleGroups = computed(() => {
       <div class="flex items-center gap-2 sm:gap-4">
         <div class="relative">
           <button @click="userMenuOpen = !userMenuOpen" class="flex items-center gap-3 neumorphic-raised-sm rounded-2xl px-4 py-2 cursor-pointer">
-            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" :style="{ backgroundColor: 'var(--color-primary)' }">
+            <div v-if="user?.foto" class="w-8 h-8 rounded-full overflow-hidden">
+              <img :src="'/storage/' + user.foto" class="w-full h-full object-cover" alt="Foto" />
+            </div>
+            <div v-else class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" :style="{ backgroundColor: 'var(--color-primary)' }">
               {{ user?.name?.charAt(0) || 'U' }}
             </div>
             <div class="hidden sm:block text-left">
@@ -243,7 +246,7 @@ const visibleGroups = computed(() => {
                   @click="menuOpen = false"
                   class="flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all duration-200"
                   :class="isItemActive(item)
-                    ? 'neumorphic-pressed-sm text-[var(--color-primary)]'
+                    ? 'neumorphic-pressed-sm text-[var(--color-secondary)]'
                     : 'text-[var(--color-text)] opacity-70 hover:neumorphic-raised-sm hover:opacity-100'"
                 >
                   <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">

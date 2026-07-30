@@ -180,23 +180,23 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
         <NeumorphicInput v-model="form.siglas" label="Siglas" icon="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
         <NeumorphicInput v-model="form.slogan" label="Slogan" icon="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
         <div>
-          <label class="block text-sm font-medium text-[#4B5563] mb-2">Logo</label>
+          <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Logo</label>
           <div class="flex items-center gap-4">
-            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]">
               <img v-if="form.logo" :src="'/storage/' + form.logo" class="h-full w-full rounded-2xl object-cover" @error="$event.target.style.display='none'" />
               <svg v-else class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
-            <button @click="uploadFile('logo')" class="rounded-xl bg-[#E8EDF2] px-4 py-2 text-sm text-gray-600 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] transition-all hover:text-gray-800">Seleccionar archivo</button>
+            <button @click="uploadFile('logo')" class="rounded-xl bg-[var(--color-bg)] px-4 py-2 text-sm text-gray-600 shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)] transition-all hover:text-gray-800">Seleccionar archivo</button>
           </div>
         </div>
         <div>
-          <label class="block text-sm font-medium text-[#4B5563] mb-2">Imagen de Fondo</label>
+          <label class="block text-sm font-medium text-[var(--color-text)] mb-2">Imagen de Fondo</label>
           <div class="flex items-center gap-4">
-            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+            <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]">
               <img v-if="form.imagen_fondo" :src="'/storage/' + form.imagen_fondo" class="h-full w-full rounded-2xl object-cover" />
               <svg v-else class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
-            <button @click="uploadFile('imagen_fondo')" class="rounded-xl bg-[#E8EDF2] px-4 py-2 text-sm text-gray-600 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] transition-all hover:text-gray-800">Seleccionar archivo</button>
+            <button @click="uploadFile('imagen_fondo')" class="rounded-xl bg-[var(--color-bg)] px-4 py-2 text-sm text-gray-600 shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)] transition-all hover:text-gray-800">Seleccionar archivo</button>
           </div>
         </div>
         <NeumorphicInput v-model="form.texto_derechos" label="Texto de Derechos" icon="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -206,25 +206,25 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
       <div v-if="activeTab === 'apariencia'" class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-6">
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div v-for="clave in ['primario', 'secundario', 'texto']" :key="clave" class="space-y-2">
-            <label class="block text-sm font-medium text-[#4B5563] capitalize">{{ clave }}</label>
+            <label class="block text-sm font-medium text-[var(--color-text)] capitalize">{{ clave }}</label>
             <div class="flex items-center gap-3">
               <input type="color" :value="form['color_' + clave]" @input="form['color_' + clave] = $event.target.value" class="h-10 w-10 rounded-xl border-0 bg-transparent cursor-pointer" />
               <input
                 :value="form['color_' + clave]"
                 @input="form['color_' + clave] = $event.target.value"
-                class="w-full rounded-2xl bg-[#E8EDF2] px-4 py-2.5 text-sm text-[#1F2937] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                class="w-full rounded-2xl bg-[var(--color-bg)] px-4 py-2.5 text-sm text-[var(--color-text)] shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
               />
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-between rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
-          <label class="text-sm font-medium text-[#4B5563]">Modo Oscuro</label>
+        <div class="flex items-center justify-between rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]">
+          <label class="text-sm font-medium text-[var(--color-text)]">Modo Oscuro</label>
           <button
             type="button"
             @click="form.modo_oscuro = !form.modo_oscuro"
-            :class="form.modo_oscuro ? 'bg-indigo-600' : 'bg-gray-300'"
-            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+            :class="form.modo_oscuro ? 'bg-[var(--color-primary)]' : 'bg-gray-300'"
+            class="relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-0 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
           >
             <span
               :class="form.modo_oscuro ? 'translate-x-6' : 'translate-x-1'"
@@ -234,12 +234,12 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
         </div>
 
         <div class="space-y-2">
-          <label class="block text-sm font-medium text-[#4B5563]">Tipografía</label>
+          <label class="block text-sm font-medium text-[var(--color-text)]">Tipografía</label>
           <div id="font-selector" class="relative">
             <button
               type="button"
               @click="toggleFontOpen()"
-              class="flex w-full items-center justify-between rounded-2xl bg-[#E8EDF2] px-4 py-3 text-sm text-[#1F2937] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300"
+              class="flex w-full items-center justify-between rounded-2xl bg-[var(--color-bg)] px-4 py-3 text-sm text-[var(--color-text)] shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
               :style="{ fontFamily: form.tipografia }"
             >
               {{ form.tipografia }}
@@ -247,15 +247,15 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
             </button>
             <div
               v-if="fontOpen"
-              class="absolute z-50 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl bg-[#EEF2F7] p-2 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]"
+              class="absolute z-50 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl bg-[var(--color-surface)] p-2 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]"
             >
               <button
                 v-for="f in fonts"
                 :key="f"
                 type="button"
                 @click="form.tipografia = f; fontOpen = false"
-                class="flex w-full items-center rounded-xl px-4 py-2.5 text-left text-sm transition-colors hover:bg-[#E8EDF2]"
-                :class="form.tipografia === f ? 'bg-[#E8EDF2] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff]' : ''"
+                class="flex w-full items-center rounded-xl px-4 py-2.5 text-left text-sm transition-colors hover:bg-[var(--color-bg)]"
+                :class="form.tipografia === f ? 'bg-[var(--color-bg)] shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)]' : ''"
                 :style="{ fontFamily: f }"
               >
                 {{ f }}
@@ -265,7 +265,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
         </div>
 
         <div
-          class="rounded-3xl p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]"
+          class="rounded-3xl p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]"
           :style="{ backgroundColor: form.modo_oscuro ? '#1F2937' : '#E8EDF2', color: form.modo_oscuro ? '#F3F4F6' : form.color_texto, fontFamily: form.tipografia }"
         >
           <h3 class="text-lg font-bold">{{ previewCard.title }}</h3>
@@ -280,23 +280,23 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
       <!-- Nosotros -->
       <div v-if="activeTab === 'nosotros'" class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-5">
         <div v-for="(_, key) in nosotros" :key="key" class="space-y-2">
-          <label class="block text-sm font-medium text-[#4B5563] capitalize">{{ key.replace('_', ' ') }}</label>
+          <label class="block text-sm font-medium text-[var(--color-text)] capitalize">{{ key.replace('_', ' ') }}</label>
           <textarea
             v-model="nosotros[key]"
             rows="4"
-            class="w-full rounded-2xl bg-[#E8EDF2] px-4 py-3 text-sm text-[#1F2937] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300 resize-none"
+            class="w-full rounded-2xl bg-[var(--color-bg)] px-4 py-3 text-sm text-[var(--color-text)] shadow-[inset_6px_6px_12px_var(--neumorphic-dark),inset_-6px_-6px_12px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] resize-none"
           ></textarea>
         </div>
 
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <label class="text-sm font-medium text-[#4B5563]">Valores</label>
-            <button @click="agregarValor" class="rounded-xl bg-[#E8EDF2] px-3 py-1.5 text-xs text-[#4F46E5] shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-indigo-700">+ Agregar</button>
+            <label class="text-sm font-medium text-[var(--color-text)]">Valores</label>
+            <button @click="agregarValor" class="rounded-xl bg-[var(--color-bg)] px-3 py-1.5 text-xs text-[var(--color-primary)] shadow-[3px_3px_6px_var(--neumorphic-dark),-3px_-3px_6px_var(--neumorphic-light)] transition-all hover:text-[var(--color-primary)]">+ Agregar</button>
           </div>
-          <div v-for="(item, i) in valores" :key="i" class="flex items-start gap-3 rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+          <div v-for="(item, i) in valores" :key="i" class="flex items-start gap-3 rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]">
             <div class="flex-1 space-y-2">
-              <input v-model="item.valor" placeholder="Valor" class="w-full rounded-xl bg-[#EEF2F7] px-3 py-1.5 text-sm text-[#1F2937] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
-              <input v-model="item.descripcion" placeholder="Descripción" class="w-full rounded-xl bg-[#EEF2F7] px-3 py-1.5 text-sm text-[#1F2937] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+              <input v-model="item.valor" placeholder="Valor" class="w-full rounded-xl bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text)] shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
+              <input v-model="item.descripcion" placeholder="Descripción" class="w-full rounded-xl bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text)] shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
             </div>
             <button @click="eliminarValor(i)" class="mt-1 rounded-lg p-1.5 text-gray-400 hover:text-red-500 transition-colors">
               <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
@@ -308,15 +308,15 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
       <!-- Servicios (landing) -->
       <div v-if="activeTab === 'servicios'" class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-5">
         <div class="flex items-center justify-between">
-          <label class="text-sm font-medium text-[#4B5563]">Servicios</label>
-          <button @click="agregarServicio" class="rounded-xl bg-[#E8EDF2] px-3 py-1.5 text-xs text-[#4F46E5] shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] transition-all hover:text-indigo-700">+ Agregar</button>
+          <label class="text-sm font-medium text-[var(--color-text)]">Servicios</label>
+          <button @click="agregarServicio" class="rounded-xl bg-[var(--color-bg)] px-3 py-1.5 text-xs text-[var(--color-primary)] shadow-[3px_3px_6px_var(--neumorphic-dark),-3px_-3px_6px_var(--neumorphic-light)] transition-all hover:text-[var(--color-primary)]">+ Agregar</button>
         </div>
-        <div v-for="(item, i) in serviciosLanding" :key="i" class="rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] space-y-3">
+        <div v-for="(item, i) in serviciosLanding" :key="i" class="rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)] space-y-3">
           <div class="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <input v-model="item.tipo" placeholder="Tipo de servicio" class="rounded-xl bg-[#EEF2F7] px-3 py-1.5 text-sm text-[#1F2937] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
-            <input v-model="item.descripcion" placeholder="Descripción" class="rounded-xl bg-[#EEF2F7] px-3 py-1.5 text-sm text-[#1F2937] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300 sm:col-span-1" />
+            <input v-model="item.tipo" placeholder="Tipo de servicio" class="rounded-xl bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text)] shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
+            <input v-model="item.descripcion" placeholder="Descripción" class="rounded-xl bg-[var(--color-surface)] px-3 py-1.5 text-sm text-[var(--color-text)] shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] sm:col-span-1" />
             <div class="flex items-center gap-2">
-              <button @click="uploadServicioFoto(i)" class="rounded-xl bg-[#EEF2F7] px-3 py-1.5 text-xs text-gray-600 shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff]">{{ item.foto ? 'Cambiar' : 'Foto' }}</button>
+              <button @click="uploadServicioFoto(i)" class="rounded-xl bg-[var(--color-surface)] px-3 py-1.5 text-xs text-gray-600 shadow-[3px_3px_6px_var(--neumorphic-dark),-3px_-3px_6px_var(--neumorphic-light)]">{{ item.foto ? 'Cambiar' : 'Foto' }}</button>
               <button @click="eliminarServicio(i)" class="rounded-lg p-1.5 text-gray-400 hover:text-red-500 transition-colors">
                 <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
               </button>
@@ -327,13 +327,13 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
 
       <!-- Módulos -->
       <div v-if="activeTab === 'modulos'" class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-5">
-        <h3 class="text-sm font-medium text-[#4B5563] mb-4">Colores de Módulos</h3>
+        <h3 class="text-sm font-medium text-[var(--color-text)] mb-4">Colores de Módulos</h3>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div v-for="(color, modulo) in moduloColores" :key="modulo" class="space-y-2 rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
-            <label class="block text-sm font-medium text-[#4B5563] capitalize">{{ modulo }}</label>
+          <div v-for="(color, modulo) in moduloColores" :key="modulo" class="space-y-2 rounded-2xl bg-[var(--color-bg)] p-4 shadow-[inset_4px_4px_8px_var(--neumorphic-dark),inset_-4px_-4px_8px_var(--neumorphic-light)]">
+            <label class="block text-sm font-medium text-[var(--color-text)] capitalize">{{ modulo }}</label>
             <div class="flex items-center gap-3">
               <input type="color" :value="moduloColores[modulo]" @input="moduloColores[modulo] = $event.target.value" class="h-10 w-10 rounded-xl border-0 bg-transparent cursor-pointer" />
-              <input :value="moduloColores[modulo]" @input="moduloColores[modulo] = $event.target.value" class="w-full rounded-xl bg-[#EEF2F7] px-3 py-2 text-sm text-[#1F2937] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+              <input :value="moduloColores[modulo]" @input="moduloColores[modulo] = $event.target.value" class="w-full rounded-xl bg-[var(--color-surface)] px-3 py-2 text-sm text-[var(--color-text)] shadow-[inset_3px_3px_6px_var(--neumorphic-dark),inset_-3px_-3px_6px_var(--neumorphic-light)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]" />
             </div>
           </div>
         </div>

@@ -118,8 +118,8 @@ function canShowItem(item) {
                 :class="[
                   'flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                   route().current(item.route)
-                    ? 'neumorphic-pressed text-[var(--color-primary)]'
-                    : 'text-[var(--color-text)] opacity-70 hover:neumorphic-raised hover:text-[var(--color-primary)] hover:opacity-100'
+                    ? 'neumorphic-pressed text-[var(--color-secondary)]'
+                    : 'text-[var(--color-text)] opacity-70 hover:neumorphic-raised hover:text-[var(--color-secondary)] hover:opacity-100'
                 ]"
               >
                 <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">

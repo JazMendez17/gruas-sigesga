@@ -15,11 +15,14 @@ class Unidade extends Model
         'empresa_id',
         'oficina_id',
         'operador_asignado_id',
-        'nombre',
-        'placa',
         'marca',
+        'tipo',
         'modelo',
-        'año',
+        'placas',
+        'numero_economico',
+        'seguro_vencimiento',
+        'estado_emplacado',
+        'activo',
     ];
 
     public function empresa()

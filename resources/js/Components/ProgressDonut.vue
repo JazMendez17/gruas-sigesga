@@ -19,8 +19,8 @@ const center = computed(() => props.size / 2)
     <svg :width="size" :height="size" class="transform -rotate-90">
       <defs>
         <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stop-color="#4F46E5" />
-          <stop offset="100%" stop-color="#7C3AED" />
+          <stop offset="0%" stop-color="var(--color-primary)" />
+          <stop offset="100%" stop-color="var(--color-secondary)" />
         </linearGradient>
         <filter id="glow">
           <feGaussianBlur stdDeviation="3" result="coloredBlur" />
@@ -35,9 +35,9 @@ const center = computed(() => props.size / 2)
         :cy="center"
         :r="radius"
         fill="none"
-        stroke="#E8EDF2"
+        stroke="var(--color-bg)"
         :stroke-width="strokeWidth"
-        class="shadow-[inset_4px_4px_8px_#d0d5da]"
+        class="shadow-[inset_4px_4px_8px_var(--neumorphic-dark)]"
       />
       <circle
         :cx="center"
@@ -54,7 +54,7 @@ const center = computed(() => props.size / 2)
       />
     </svg>
     <div class="absolute inset-0 flex items-center justify-center">
-      <span class="text-2xl font-bold text-[#1F2937]">{{ percentage }}%</span>
+      <span class="text-2xl font-bold text-[var(--color-text)]">{{ percentage }}%</span>
     </div>
   </div>
 </template>

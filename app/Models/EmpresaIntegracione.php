@@ -13,10 +13,10 @@ class EmpresaIntegracione extends Model
 
     protected $fillable = [
         'empresa_id',
-        'titulo',
-        'descripcion',
-        'icono',
-        'url',
+        'proveedor',
+        'api_key',
+        'configuracion_json',
+        'activo',
     ];
 
     public function empresa()

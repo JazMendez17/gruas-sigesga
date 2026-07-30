@@ -3,16 +3,33 @@ import { router, useForm } from '@inertiajs/vue3'
 import AppLayout from '@/Pages/Panel/AppLayout.vue'
 import NeumorphicInput from '@/Components/NeumorphicInput.vue'
 import NeumorphicButton from '@/Components/NeumorphicButton.vue'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const form = useForm({
-  cliente: '',
-  tipo_servicio: '',
-  origen: '',
-  destino: '',
-  distancia: '',
-  monto: '',
+  cliente_id: '',
+  tipo_servicio_id: '',
+  origen_direccion: '',
+  destino_direccion: '',
+  distancia_km: '',
+  costo_total: '',
   observaciones: '',
 })
+
+const rules = {
+  cliente_id: ['required'],
+  tipo_servicio_id: ['required'],
+  origen_direccion: ['required', 'min:2', 'max:255'],
+  destino_direccion: ['max:255'],
+  distancia_km: ['numeric'],
+  costo_total: ['numeric'],
+}
+const val = useFormValidation(form, rules)
+
+function submit() {
+  form.post(route('panel.cotizaciones.store'), {
+    onSuccess: () => form.reset(),
+  })
+}
 </script>
 
 <template>
@@ -24,31 +41,31 @@ const form = useForm({
       </div>
 
       <div class="neumorphic-card p-6 max-w-2xl">
-        <form @submit.prevent="form.post(route('panel.cotizaciones.store'))" class="space-y-5">
+        <form @submit.prevent="val.handleSubmit(submit)" class="space-y-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Cliente</label>
-              <NeumorphicInput v-model="form.cliente" placeholder="Nombre del cliente" />
+              <NeumorphicInput v-model="form.cliente_id" placeholder="ID del cliente" :error="val.getError('cliente_id')" @input="val.handleInput('cliente_id')" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Tipo de Servicio</label>
-              <NeumorphicInput v-model="form.tipo_servicio" placeholder="Seleccionar tipo" />
+              <NeumorphicInput v-model="form.tipo_servicio_id" placeholder="ID del tipo de servicio" :error="val.getError('tipo_servicio_id')" @input="val.handleInput('tipo_servicio_id')" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Origen</label>
-              <NeumorphicInput v-model="form.origen" placeholder="Dirección de origen" />
+              <NeumorphicInput v-model="form.origen_direccion" placeholder="Dirección de origen" :error="val.getError('origen_direccion')" @input="val.handleInput('origen_direccion')" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Destino</label>
-              <NeumorphicInput v-model="form.destino" placeholder="Dirección de destino" />
+              <NeumorphicInput v-model="form.destino_direccion" placeholder="Dirección de destino" :error="val.getError('destino_direccion')" @input="val.handleInput('destino_direccion')" />
             </div>
             <div>
               <label class="block text-sm font-medium text-gray-600 mb-1">Distancia (km)</label>
-              <NeumorphicInput v-model="form.distancia" type="number" placeholder="0" />
+              <NeumorphicInput v-model="form.distancia_km" type="number" step="0.01" placeholder="0" :error="val.getError('distancia_km')" @input="val.handleInput('distancia_km')" />
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-600 mb-1">Monto Estimado</label>
-              <NeumorphicInput v-model="form.monto" type="number" placeholder="$0.00" />
+              <label class="block text-sm font-medium text-gray-600 mb-1">Costo Total</label>
+              <NeumorphicInput v-model="form.costo_total" type="number" step="0.01" placeholder="$0.00" :error="val.getError('costo_total')" @input="val.handleInput('costo_total')" />
             </div>
           </div>
 
@@ -58,7 +75,7 @@ const form = useForm({
           </div>
 
           <div class="flex gap-3 pt-2">
-            <NeumorphicButton type="submit" :disabled="form.processing">Guardar Cotización</NeumorphicButton>
+            <NeumorphicButton type="submit" :loading="form.processing">Guardar Cotización</NeumorphicButton>
             <NeumorphicButton variant="secondary" @click="router.visit(route('panel.cotizaciones.index'))">Cancelar</NeumorphicButton>
           </div>
         </form>

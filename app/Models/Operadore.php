@@ -14,8 +14,11 @@ class Operadore extends Model
     protected $fillable = [
         'empresa_id',
         'empleado_id',
-        'numero_empleado',
-        'puesto',
+        'tipo_licencia',
+        'numero_licencia',
+        'fecha_expedicion',
+        'fecha_vigencia',
+        'disponible',
     ];
 
     public function empresa()

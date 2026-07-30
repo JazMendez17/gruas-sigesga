@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, reactive } from 'vue'
+import { ref, computed, onMounted, reactive } from 'vue'
 import { Head, usePage } from '@inertiajs/vue3'
 import { useTheme } from '@/Composables/useTheme'
 
@@ -11,7 +11,6 @@ const props = defineProps({
 })
 
 const empresa = computed(() => usePage().props.empresa || {})
-const scrolled = ref(false)
 const mobileMenuOpen = ref(false)
 
 const cssVars = computed(() => ({
@@ -21,12 +20,7 @@ const cssVars = computed(() => ({
     '--font-family': empresa.value.tipografia ? `"${empresa.value.tipografia}", sans-serif` : 'Roboto, sans-serif',
 }))
 
-const handleScroll = () => {
-    scrolled.value = window.scrollY > 60
-}
-
 onMounted(() => {
-    window.addEventListener('scroll', handleScroll)
     const font = empresa.value.tipografia
     if (font) {
         const link = document.createElement('link')
@@ -34,10 +28,6 @@ onMounted(() => {
         link.rel = 'stylesheet'
         document.head.appendChild(link)
     }
-})
-
-onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll)
 })
 
 const scrollTo = (id) => {
@@ -138,17 +128,13 @@ const getIcon = (name) => icons[name] || ''
             <p class="text-sm font-medium">{{ flash.error }}</p>
             <button @click="flash.error = null" class="ml-auto text-red-600 hover:text-red-800">&times;</button>
         </div>
-        <nav :class="[
-            scrolled
-                ? 'bg-[var(--color-bg)] shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)]'
-                : 'bg-transparent',
-        ]" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 px-4 md:px-8">
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-[var(--color-bg)] shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] transition-all duration-300 py-3 px-4 md:px-8">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <a href="#inicio" @click.prevent="scrollTo('inicio')" class="flex items-center gap-3 group">
                     <div v-if="empresa.logo" class="w-10 h-10 rounded-2xl overflow-hidden shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]">
                         <img :src="'/storage/' + empresa.logo" :alt="empresa.nombre" class="w-full h-full object-contain" />
                     </div>
-                    <div v-else class="w-10 h-10 rounded-2xl bg-[#E8EDF2] flex items-center justify-center text-lg font-bold shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
+                    <div v-else class="w-10 h-10 rounded-2xl bg-[var(--color-bg)] flex items-center justify-center text-lg font-bold shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
                          :style="{ color: 'var(--color-primary)' }">
                         {{ (empresa.siglas || empresa.nombre || 'SG').charAt(0) }}
                     </div>
@@ -161,8 +147,7 @@ const getIcon = (name) => icons[name] || ''
                     <a v-for="link in navLinks" :key="link.id"
                        :href="`#${link.id}`"
                        @click.prevent="scrollTo(link.id)"
-                       class="px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-200 hover:shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]"
-                       :class="scrolled ? 'text-gray-700' : 'text-white/90 hover:text-white'">
+                       class="px-4 py-2 rounded-2xl text-sm font-medium transition-all duration-200 hover:shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] text-[var(--color-text)]">
                         {{ link.label }}
                     </a>
                 </div>
@@ -181,18 +166,17 @@ const getIcon = (name) => icons[name] || ''
 </div>
 
                 <button @click="mobileMenuOpen = !mobileMenuOpen"
-                        class="md:hidden p-2 rounded-2xl transition-all duration-200"
-                        :class="scrolled ? 'shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] text-gray-700' : 'text-white'">
+                        class="md:hidden p-2 rounded-2xl shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] text-[var(--color-text)] transition-all duration-200">
                     <span class="w-6 h-6 block" v-html="getIcon(mobileMenuOpen ? 'x' : 'menu')"></span>
                 </button>
             </div>
 
             <div v-if="mobileMenuOpen"
-                 class="md:hidden mt-3 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] p-4 space-y-2">
+                 class="md:hidden mt-3 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] p-4 space-y-2">
                 <a v-for="link in navLinks" :key="link.id"
                    :href="`#${link.id}`"
                    @click.prevent="scrollTo(link.id)"
-                   class="block px-4 py-3 rounded-2xl text-sm font-medium text-gray-700 hover:shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] transition-all duration-200">
+                   class="block px-4 py-3 rounded-2xl text-sm font-medium text-[var(--color-text)] hover:shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] transition-all duration-200">
                     {{ link.label }}
                 </a>
                 <hr class="border-gray-300 my-2" />
@@ -251,19 +235,19 @@ const getIcon = (name) => icons[name] || ''
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-8 mb-20">
-                    <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff]">
+                    <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff]">
                         <h3 class="text-xl font-bold mb-4" :style="{ color: 'var(--color-primary)' }">Quiénes Somos</h3>
                         <p class="text-gray-600 leading-relaxed">
                             Somos una empresa dedicada a la prestación de servicios de grúas y asistencia vial, comprometidos con la calidad y la satisfacción de nuestros clientes. Contamos con un equipo profesional y una flota moderna para atender cualquier emergencia en la vía.
                         </p>
                     </div>
-                    <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff]">
+                    <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff]">
                         <h3 class="text-xl font-bold mb-4" :style="{ color: 'var(--color-primary)' }">Misión</h3>
                         <p class="text-gray-600 leading-relaxed">
                             Brindar servicios de grúas y asistencia vial con rapidez, seguridad y calidad, superando las expectativas de nuestros clientes y contribuyendo al bienestar de la comunidad.
                         </p>
                     </div>
-                    <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff]">
+                    <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff]">
                         <h3 class="text-xl font-bold mb-4" :style="{ color: 'var(--color-primary)' }">Visión</h3>
                         <p class="text-gray-600 leading-relaxed">
                             Ser la empresa líder en servicios de grúas y asistencia vial a nivel nacional, reconocida por nuestra excelencia operativa, innovación tecnológica y compromiso con el cliente.
@@ -276,8 +260,8 @@ const getIcon = (name) => icons[name] || ''
                     <p class="text-gray-500 text-center mb-10 max-w-2xl mx-auto">Los principios que guían cada uno de nuestros servicios y decisiones.</p>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div v-for="val in valores" :key="val.titulo"
-                             class="p-6 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff] group">
-                            <div class="w-12 h-12 rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] flex items-center justify-center mb-4 group-hover:shadow-[inset_6px_6px_12px_#c9ced3,inset_-6px_-6px_12px_#ffffff] transition-all duration-300"
+                             class="p-6 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff] group">
+                            <div class="w-12 h-12 rounded-2xl bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff] flex items-center justify-center mb-4 group-hover:shadow-[inset_6px_6px_12px_#c9ced3,inset_-6px_-6px_12px_#ffffff] transition-all duration-300"
                                  :style="{ color: 'var(--color-primary)' }">
                                 <span class="w-6 h-6" v-html="getIcon(val.icono)"></span>
                             </div>
@@ -292,8 +276,8 @@ const getIcon = (name) => icons[name] || ''
                     <p class="text-gray-500 text-center mb-10 max-w-2xl mx-auto">Herramientas y servicios disponibles para ti.</p>
                     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div v-for="acceso in accesos" :key="acceso.titulo"
-                             class="p-6 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff] group text-center">
-                            <div class="w-14 h-14 rounded-2xl mx-auto mb-4 bg-[#E8EDF2] shadow-[6px_6px_12px_#d0d5da,-6px_-6px_12px_#ffffff] flex items-center justify-center transition-all duration-300 group-hover:shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]"
+                             class="p-6 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff] group text-center">
+                            <div class="w-14 h-14 rounded-2xl mx-auto mb-4 bg-[var(--color-bg)] shadow-[6px_6px_12px_#d0d5da,-6px_-6px_12px_#ffffff] flex items-center justify-center transition-all duration-300 group-hover:shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]"
                                  :style="{ color: 'var(--color-primary)' }">
                                 <span class="w-7 h-7" v-html="getIcon(acceso.icono)"></span>
                             </div>
@@ -321,10 +305,10 @@ const getIcon = (name) => icons[name] || ''
 
                 <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     <div v-for="(svc, idx) in servicios" :key="svc.tipo"
-                         class="rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] overflow-hidden transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff] group">
+                         class="rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff] overflow-hidden transition-all duration-300 hover:shadow-[12px_12px_24px_#c9ced3,-12px_-12px_24px_#ffffff] group">
                         <div class="h-48 flex items-center justify-center relative overflow-hidden"
                              :style="{ background: `linear-gradient(135deg, ${svc.color}22, ${svc.color}44)` }">
-                            <div class="w-24 h-24 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#0000001a,-8px_-8px_16px_#ffffff66] flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                            <div class="w-24 h-24 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#0000001a,-8px_-8px_16px_#ffffff66] flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                                  :style="{ color: svc.color }">
                                 <span class="w-12 h-12" v-html="getIcon(idx === 0 || idx === 1 ? 'truck' : idx === 2 ? 'wrench' : idx === 3 ? 'key' : idx === 4 ? 'battery' : 'key')"></span>
                             </div>
@@ -354,54 +338,54 @@ const getIcon = (name) => icons[name] || ''
 
                 <div class="grid lg:grid-cols-2 gap-12">
                     <div class="space-y-8">
-                        <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+                        <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
                             <h3 class="text-xl font-bold mb-6" :style="{ color: 'var(--color-primary)' }">Información de Contacto</h3>
                             <div class="space-y-5">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-2xl bg-[#E8EDF2] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0"
+                                    <div class="w-12 h-12 rounded-2xl bg-[var(--color-bg)] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0"
                                          :style="{ color: 'var(--color-primary)' }">
                                         <span class="w-5 h-5" v-html="getIcon('phone')"></span>
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Teléfono</p>
-                                        <p class="text-gray-700 font-medium">{{ empresa.telefono || '(555) 123-4567' }}</p>
+                                        <p class="text-[var(--color-text)] font-medium">{{ empresa.telefono || '(555) 123-4567' }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-2xl bg-[#E8EDF2] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0"
+                                    <div class="w-12 h-12 rounded-2xl bg-[var(--color-bg)] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0"
                                          :style="{ color: 'var(--color-primary)' }">
                                         <span class="w-5 h-5" v-html="getIcon('mail')"></span>
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Email</p>
-                                        <p class="text-gray-700 font-medium">{{ empresa.email || 'contacto@sigesga.com' }}</p>
+                                        <p class="text-[var(--color-text)] font-medium">{{ empresa.email || 'contacto@sigesga.com' }}</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-2xl bg-[#E8EDF2] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0"
+                                    <div class="w-12 h-12 rounded-2xl bg-[var(--color-bg)] shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] flex items-center justify-center shrink-0"
                                          :style="{ color: 'var(--color-primary)' }">
                                         <span class="w-5 h-5" v-html="getIcon('pin')"></span>
                                     </div>
                                     <div>
                                         <p class="text-xs text-gray-400 uppercase tracking-wider font-medium">Ubicación</p>
-                                        <p class="text-gray-700 font-medium">{{ empresa.direccion || 'Av. Principal #123, Ciudad' }}</p>
+                                        <p class="text-[var(--color-text)] font-medium">{{ empresa.direccion || 'Av. Principal #123, Ciudad' }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+                        <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
                             <h3 class="text-xl font-bold mb-6" :style="{ color: 'var(--color-primary)' }">Oficinas</h3>
                             <div class="space-y-4">
-                                <div class="p-4 rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+                                <div class="p-4 rounded-2xl bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
                                     <p class="font-semibold text-gray-800">Oficina Central</p>
                                     <p class="text-sm text-gray-500">Blvd. Corporativo 500, Col. Centro</p>
                                 </div>
-                                <div class="p-4 rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+                                <div class="p-4 rounded-2xl bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
                                     <p class="font-semibold text-gray-800">Sucursal Norte</p>
                                     <p class="text-sm text-gray-500">Av. Industrial 1500, Zona Norte</p>
                                 </div>
-                                <div class="p-4 rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+                                <div class="p-4 rounded-2xl bg-[var(--color-bg)] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
                                     <p class="font-semibold text-gray-800">Sucursal Sur</p>
                                     <p class="text-sm text-gray-500">Carr. Nacional Km 15, Zona Sur</p>
                                 </div>
@@ -409,25 +393,25 @@ const getIcon = (name) => icons[name] || ''
                         </div>
                     </div>
 
-                    <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+                    <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
                         <h3 class="text-xl font-bold mb-6" :style="{ color: 'var(--color-primary)' }">Envíanos un Mensaje</h3>
                         <form @submit.prevent="submitContacto" class="space-y-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-600 mb-2">Nombre</label>
                                 <input v-model="form.nombre" type="text" required
-                                       class="w-full px-5 py-3.5 rounded-2xl bg-[#E8EDF2] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] text-gray-700 placeholder-gray-400 focus:outline-none transition-all duration-200"
+                                       class="w-full px-5 py-3.5 rounded-2xl bg-[var(--color-bg)] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] text-[var(--color-text)] placeholder-gray-400 focus:outline-none transition-all duration-200"
                                        placeholder="Tu nombre completo" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-600 mb-2">Email</label>
                                 <input v-model="form.email" type="email" required
-                                       class="w-full px-5 py-3.5 rounded-2xl bg-[#E8EDF2] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] text-gray-700 placeholder-gray-400 focus:outline-none transition-all duration-200"
+                                       class="w-full px-5 py-3.5 rounded-2xl bg-[var(--color-bg)] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] text-[var(--color-text)] placeholder-gray-400 focus:outline-none transition-all duration-200"
                                        placeholder="tu@correo.com" />
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-600 mb-2">Mensaje</label>
                                 <textarea v-model="form.mensaje" required rows="5"
-                                          class="w-full px-5 py-3.5 rounded-2xl bg-[#E8EDF2] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] text-gray-700 placeholder-gray-400 focus:outline-none transition-all duration-200 resize-none"
+                                          class="w-full px-5 py-3.5 rounded-2xl bg-[var(--color-bg)] shadow-[inset_6px_6px_12px_#d0d5da,inset_-6px_-6px_12px_#ffffff] text-[var(--color-text)] placeholder-gray-400 focus:outline-none transition-all duration-200 resize-none"
                                           placeholder="Escribe tu mensaje aquí..."></textarea>
                             </div>
                             <button type="submit"
@@ -443,10 +427,10 @@ const getIcon = (name) => icons[name] || ''
 
         <footer class="py-8 px-4 md:px-8">
             <div class="max-w-7xl mx-auto">
-                <div class="p-8 rounded-3xl bg-[#E8EDF2] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
+                <div class="p-8 rounded-3xl bg-[var(--color-bg)] shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
                     <div class="flex flex-col md:flex-row items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-xl bg-[#E8EDF2] shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] flex items-center justify-center text-xs font-bold"
+                            <div class="w-8 h-8 rounded-xl bg-[var(--color-bg)] shadow-[3px_3px_6px_#d0d5da,-3px_-3px_6px_#ffffff] flex items-center justify-center text-xs font-bold"
                                  :style="{ color: 'var(--color-primary)' }">
                                 {{ (empresa.siglas || empresa.nombre || 'SG').charAt(0) }}
                             </div>

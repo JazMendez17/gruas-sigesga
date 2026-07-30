@@ -14,6 +14,14 @@ const defaultModuloColores = {
   reportes: '#0D9488',
 }
 
+function lighten(hex, amount) {
+  const num = parseInt(hex.replace('#', ''), 16)
+  const r = Math.min(255, Math.round((num >> 16) + (255 - (num >> 16)) * amount))
+  const g = Math.min(255, Math.round(((num >> 8) & 0xff) + (255 - ((num >> 8) & 0xff)) * amount))
+  const b = Math.min(255, Math.round((num & 0xff) + (255 - (num & 0xff)) * amount))
+  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`
+}
+
 export function useTheme() {
   const page = usePage()
 
@@ -52,11 +60,21 @@ export function useTheme() {
   }
 
   function applyCSSVariables() {
+    const p = primaryColor.value
+    const s = secondaryColor.value
+
     document.documentElement.style.setProperty('--font-family', fontFamily.value)
-    document.documentElement.style.setProperty('--color-primary', primaryColor.value)
-    document.documentElement.style.setProperty('--color-secondary', secondaryColor.value)
+    document.documentElement.style.setProperty('--color-primary', p)
+    document.documentElement.style.setProperty('--color-primary-light', lighten(p, 0.85))
+    document.documentElement.style.setProperty('--color-secondary', s)
+    document.documentElement.style.setProperty('--color-secondary-light', lighten(s, 0.85))
     document.documentElement.style.setProperty('--color-bg', bgColor.value)
     document.documentElement.style.setProperty('--color-text', textColor.value)
+    document.documentElement.style.setProperty('--color-text-muted', isDark.value ? '#9CA3AF' : '#6B7280')
+    document.documentElement.style.setProperty('--color-text-placeholder', isDark.value ? '#6B7280' : '#9CA3AF')
+    document.documentElement.style.setProperty('--color-success', '#059669')
+    document.documentElement.style.setProperty('--color-warning', '#D97706')
+    document.documentElement.style.setProperty('--color-danger', '#DC2626')
 
     if (isDark.value) {
       document.documentElement.style.setProperty('--color-surface', '#1e293b')
