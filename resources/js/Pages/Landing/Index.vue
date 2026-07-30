@@ -48,7 +48,7 @@ const scrollTo = (id) => {
 
 const goTo = (path) => {
     mobileMenuOpen.value = false
-    router.visit(path)
+    window.location.href = path
 }
 
 const navLinks = [
