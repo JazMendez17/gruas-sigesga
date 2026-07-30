@@ -53,11 +53,12 @@ Al ejecutar los seeders, se crean automáticamente las siguientes cuentas para p
 
 | Rol | Nombre | Correo Electrónico | Contraseña |
 |:---:|--------|-------------------|:----------:|
-| 🛡️ **Administrador** | Juan Carlos Pérez | admin@sigesga.com | `password` |
-| 💰 **Cotizador** | Cotizador Sistema | cotizador@sigesga.com | `password` |
-| 🚛 **Operador** | Roberto Méndez | operador@sigesga.com | `password` |
+| Administrador | Juan Carlos Pérez | admin@sigesga.com | `123456` |
+| Cotizador | Cotizador Sistema | cotizador@sigesga.com | `123456` |
+| Operador | Roberto Méndez | operador@sigesga.com | `123456` |
+| Cliente | Cliente Demo | cliente@sigesga.com | `123456` |
 
-> **Nota:** Todos los roles tienen diferentes permisos dentro del panel. El rol `admin` tiene acceso completo al sistema.
+> **Nota:** El rol `admin` tiene acceso completo al sistema. Los roles `cotizador`, `operador` y `cliente` tienen permisos limitados según su perfil.
 
 ---
 
