@@ -2,6 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+#nprogress .bar {
+    height: 5px !important;
+    background: linear-gradient(90deg, #6366F1, #A855F7, #EC4899) !important;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.6), 0 0 24px rgba(99, 102, 241, 0.3) !important;
+}
+
+#nprogress .peg {
+    display: none !important;
+}
+
+#nprogress .spinner {
+    display: block !important;
+    top: 18px !important;
+    right: 18px !important;
+}
+
+#nprogress .spinner-icon {
+    width: 22px !important;
+    height: 22px !important;
+    border-top-color: #6366F1 !important;
+    border-left-color: #A855F7 !important;
+}
+
 :root {
     --font-family: 'Roboto', sans-serif;
     --color-primary: #4F46E5;
