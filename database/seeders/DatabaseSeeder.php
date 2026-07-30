@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             OficinaSeeder::class,
             EmpleadoSeeder::class,
             UsuarioSeeder::class,
+            OperadoreSeeder::class,
             CatalogoServicioSeeder::class,
             ClienteSeeder::class,
         ]);

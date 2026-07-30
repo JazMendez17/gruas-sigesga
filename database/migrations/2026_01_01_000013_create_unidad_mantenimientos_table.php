@@ -10,7 +10,9 @@ return new class extends Migration
     {
         Schema::create('unidad_mantenimientos', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('empresa_id')->constrained('empresas')->onDelete('cascade');
             $table->foreignId('unidad_id')->constrained('unidades')->onDelete('cascade');
+            $table->index('empresa_id');
             $table->string('tipo', 100);
             $table->date('fecha');
             $table->integer('kilometraje')->nullable();

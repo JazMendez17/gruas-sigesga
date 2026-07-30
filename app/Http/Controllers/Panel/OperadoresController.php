@@ -70,7 +70,7 @@ class OperadoresController extends Controller
     public function show($id)
     {
         return Inertia::render('Panel/Operadores/Show', [
-            'operador' => Operadore::with('empleado', 'unidad')->findOrFail($id),
+            'operador' => Operadore::with('empleado', 'unidad')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
         ]);
     }
 
@@ -80,14 +80,14 @@ class OperadoresController extends Controller
         $empresaId = $user->empresa_id;
 
         return Inertia::render('Panel/Operadores/Create', [
-            'operador' => Operadore::findOrFail($id),
+            'operador' => Operadore::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
             'empleados' => Empleado::where('empresa_id', $empresaId)->get(['id', 'nombre', 'apellido_paterno']),
         ]);
     }
 
     public function update(StoreOperadorRequest $request, $id)
     {
-        $operador = Operadore::findOrFail($id);
+        $operador = Operadore::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
         $data['disponible'] = $request->boolean('disponible');
@@ -99,7 +99,7 @@ class OperadoresController extends Controller
 
     public function destroy($id)
     {
-        $operadore = Operadore::findOrFail($id);
+        $operadore = Operadore::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         if ($operadore->servicios()->whereIn('estado', ['asignado', 'inicio_servicio', 'en_sitio_origen', 'salida_destino', 'en_destino'])->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar el operador porque tiene servicios activos asignados.');

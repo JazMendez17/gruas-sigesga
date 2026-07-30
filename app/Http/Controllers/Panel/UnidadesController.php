@@ -69,7 +69,7 @@ class UnidadesController extends Controller
     public function show($id)
     {
         return Inertia::render('Panel/Unidades/Show', [
-            'unidad' => Unidade::with('operadorAsignado.empleado', 'oficina')->findOrFail($id),
+            'unidad' => Unidade::with('operadorAsignado.empleado', 'oficina')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
         ]);
     }
 
@@ -79,7 +79,7 @@ class UnidadesController extends Controller
         $empresaId = $user->empresa_id;
 
         return Inertia::render('Panel/Unidades/Create', [
-            'unidad' => Unidade::findOrFail($id),
+            'unidad' => Unidade::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
             'operadores' => Operadore::with('empleado')->where('empresa_id', $empresaId)->get(),
             'oficinas' => Oficina::where('empresa_id', $empresaId)->get(),
         ]);
@@ -87,7 +87,7 @@ class UnidadesController extends Controller
 
     public function update(StoreUnidadRequest $request, $id)
     {
-        $unidad = Unidade::findOrFail($id);
+        $unidad = Unidade::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
         $data['activo'] = $request->boolean('activo');
@@ -99,9 +99,9 @@ class UnidadesController extends Controller
 
     public function destroy($id)
     {
-        $unidad = Unidade::findOrFail($id);
+        $unidad = Unidade::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
-        if ($unidad->mantenimientos()->count() > 0 || $unidad->servicios()->whereIn('estado', ['asignado', 'inicio_servicio', 'en_sitio_origen', 'salida_destino', 'en_destino'])->count() > 0) {
+        if ($unidad->unidadMantenimientos()->count() > 0 || $unidad->servicios()->whereIn('estado', ['asignado', 'inicio_servicio', 'en_sitio_origen', 'salida_destino', 'en_destino'])->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar la unidad porque tiene mantenimientos o servicios activos.');
         }
 

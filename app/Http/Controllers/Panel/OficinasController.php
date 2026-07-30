@@ -70,7 +70,7 @@ class OficinasController extends Controller
 
     public function show($id)
     {
-        $oficina = Oficina::with('direccion')->findOrFail($id);
+        $oficina = Oficina::with('direccion')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Oficinas/Show', [
             'oficina' => $oficina,
@@ -80,13 +80,13 @@ class OficinasController extends Controller
     public function edit($id)
     {
         return Inertia::render('Panel/Oficinas/Create', [
-            'oficina' => Oficina::with('direccion')->findOrFail($id),
+            'oficina' => Oficina::with('direccion')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
         ]);
     }
 
     public function update(StoreOficinaRequest $request, $id)
     {
-        $oficina = Oficina::findOrFail($id);
+        $oficina = Oficina::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -129,7 +129,7 @@ class OficinasController extends Controller
 
     public function destroy($id)
     {
-        Oficina::findOrFail($id)->delete();
+        Oficina::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id)->delete();
 
         return redirect()->route('panel.oficinas.index')
             ->with('success', 'Oficina eliminada correctamente');

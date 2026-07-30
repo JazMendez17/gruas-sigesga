@@ -9,6 +9,12 @@ class EmpresaSeeder extends Seeder
 {
     public function run(): void
     {
+        $empresa = DB::table('empresas')->where('nombre', 'Grúas y Equipos del Valle, S.A. de C.V.')->first();
+
+        if ($empresa) {
+            return;
+        }
+
         $empresaId = DB::table('empresas')->insertGetId([
             'nombre' => 'Grúas y Equipos del Valle, S.A. de C.V.',
             'siglas' => 'GEV',
@@ -20,7 +26,6 @@ class EmpresaSeeder extends Seeder
             'color_secundario' => '#7C3AED',
             'color_fondo' => '#E8EDF2',
             'color_texto' => '#1F2937',
-            'tipografia' => 'Inter',
             'modo_oscuro' => false,
             'telefono_contacto' => '55-1234-5678',
             'email_contacto' => 'contacto@gevsigesga.com',

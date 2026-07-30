@@ -19,6 +19,14 @@ class EmpresaIntegracione extends Model
         'activo',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'configuracion_json' => 'array',
+            'activo' => 'boolean',
+        ];
+    }
+
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id');

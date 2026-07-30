@@ -71,7 +71,7 @@ const filteredCotizaciones = computed(() => {
       </div>
 
       <div class="rounded-3xl bg-[#EEF2F7] p-6 shadow-[8px_8px_16px_#d0d5da,-8px_-8px_16px_#ffffff]">
-        <DataTable :columns="columns" :data="filteredCotizaciones" @row-click="(row) => router.visit(route('panel.cotizaciones.show', { id: row.id }))">
+        <DataTable :columns="columns" :data="filteredCotizaciones" @rowClick="(row) => router.visit(route('panel.cotizaciones.show', { id: row.id }))">
           <template #cell-estatus="{ row }">
             <Badge :variant="row.estatus">{{ row.estatus }}</Badge>
           </template>

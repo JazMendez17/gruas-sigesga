@@ -62,13 +62,13 @@ class UsuariosController extends Controller
     public function edit($id)
     {
         return Inertia::render('Panel/Usuarios/Create', [
-            'usuario' => Usuario::findOrFail($id),
+            'usuario' => Usuario::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
         ]);
     }
 
     public function update(StoreUsuarioRequest $request, $id)
     {
-        $usuario = Usuario::findOrFail($id);
+        $usuario = Usuario::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -87,7 +87,7 @@ class UsuariosController extends Controller
 
     public function destroy($id)
     {
-        $usuario = Usuario::findOrFail($id);
+        $usuario = Usuario::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         if ($usuario->id === Auth::id()) {
             return redirect()->back()->with('error', 'No puedes eliminar tu propio usuario.');

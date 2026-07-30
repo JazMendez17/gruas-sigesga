@@ -53,7 +53,7 @@ const historialServicios = [
           <NeumorphicButton variant="secondary" @click="router.visit(route('panel.clientes.index'))">
             Volver
           </NeumorphicButton>
-          <NeumorphicButton @click="alert('Editar cliente')">
+          <NeumorphicButton @click="router.visit(route('panel.clientes.edit', cliente.id))">
             Editar
           </NeumorphicButton>
         </div>

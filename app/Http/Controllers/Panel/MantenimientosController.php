@@ -64,6 +64,7 @@ class MantenimientosController extends Controller
     public function store(StoreMantenimientoRequest $request)
     {
         $data = $request->validated();
+        $data['empresa_id'] = auth()->user()->empresa_id;
 
         UnidadMantenimiento::create($data);
 
@@ -74,20 +75,20 @@ class MantenimientosController extends Controller
     public function show($id)
     {
         return Inertia::render('Panel/Mantenimientos/Show', [
-            'mantenimiento' => UnidadMantenimiento::with('unidad')->findOrFail($id),
+            'mantenimiento' => UnidadMantenimiento::with('unidad')->whereHas('unidad', fn($q) => $q->where('empresa_id', auth()->user()->empresa_id))->findOrFail($id),
         ]);
     }
 
     public function edit($id)
     {
         return Inertia::render('Panel/Mantenimientos/Create', [
-            'mantenimiento' => UnidadMantenimiento::with('unidad')->findOrFail($id),
+            'mantenimiento' => UnidadMantenimiento::with('unidad')->whereHas('unidad', fn($q) => $q->where('empresa_id', auth()->user()->empresa_id))->findOrFail($id),
         ]);
     }
 
     public function update(StoreMantenimientoRequest $request, $id)
     {
-        $mantenimiento = UnidadMantenimiento::findOrFail($id);
+        $mantenimiento = UnidadMantenimiento::whereHas('unidad', fn($q) => $q->where('empresa_id', auth()->user()->empresa_id))->findOrFail($id);
 
         $data = $request->validated();
 
@@ -99,7 +100,7 @@ class MantenimientosController extends Controller
 
     public function destroy($id)
     {
-        UnidadMantenimiento::findOrFail($id)->delete();
+        UnidadMantenimiento::whereHas('unidad', fn($q) => $q->where('empresa_id', auth()->user()->empresa_id))->findOrFail($id)->delete();
 
         return redirect()->route('panel.mantenimientos.index')
             ->with('success', 'Mantenimiento eliminado correctamente');

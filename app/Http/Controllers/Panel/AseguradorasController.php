@@ -53,7 +53,7 @@ class AseguradorasController extends Controller
 
     public function show($id)
     {
-        $aseguradora = Aseguradora::with(['aseguradoraContactos', 'convenios'])->findOrFail($id);
+        $aseguradora = Aseguradora::with(['aseguradoraContactos', 'convenios'])->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Aseguradoras/Show', [
             'aseguradora' => [
@@ -84,13 +84,13 @@ class AseguradorasController extends Controller
     public function edit($id)
     {
         return Inertia::render('Panel/Aseguradoras/Create', [
-            'aseguradora' => Aseguradora::findOrFail($id),
+            'aseguradora' => Aseguradora::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
         ]);
     }
 
     public function update(StoreAseguradoraRequest $request, $id)
     {
-        $aseguradora = Aseguradora::findOrFail($id);
+        $aseguradora = Aseguradora::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -102,7 +102,7 @@ class AseguradorasController extends Controller
 
     public function destroy($id)
     {
-        $aseguradora = Aseguradora::findOrFail($id);
+        $aseguradora = Aseguradora::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         if ($aseguradora->convenios()->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar la aseguradora porque tiene convenios asociados.');

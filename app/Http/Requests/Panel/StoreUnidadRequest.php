@@ -18,15 +18,18 @@ class StoreUnidadRequest extends FormRequest
         $data = $this->all();
         array_walk_recursive($data, function (&$value) {
             if (is_string($value)) {
-                $value = trim($value);
+                $value = trim($value) === '' ? null : trim($value);
             }
         });
         $this->merge($data);
+        if ($this->isJson()) {
+            $this->json()->replace($data);
+        }
     }
 
     public function rules(): array
     {
-        $id = $this->route('unidade');
+        $id = $this->route('id');
 
         return [
             'marca' => 'required|string|max:255',
@@ -34,7 +37,7 @@ class StoreUnidadRequest extends FormRequest
             'modelo' => 'nullable|string|max:255',
             'placas' => 'required|string|max:20|unique:unidades,placas,' . $id,
             'numero_economico' => 'required|string|max:50|unique:unidades,numero_economico,' . $id,
-            'seguro_vencimiento' => 'nullable|date|after:today',
+            'seguro_vencimiento' => 'nullable|date',
             'estado_emplacado' => 'nullable|string|max:255',
             'activo' => 'nullable|boolean',
             'oficina_id' => 'nullable|exists:oficinas,id',
@@ -57,7 +60,7 @@ class StoreUnidadRequest extends FormRequest
             'numero_economico.max' => 'El número económico no debe exceder los 50 caracteres.',
             'numero_economico.unique' => 'El número económico ya está registrado en el sistema.',
             'seguro_vencimiento.date' => 'La fecha de vencimiento del seguro no tiene un formato válido.',
-            'seguro_vencimiento.after' => 'La fecha de vencimiento del seguro debe ser posterior a hoy.',
+
             'estado_emplacado.max' => 'El estado emplacado no debe exceder los 255 caracteres.',
             'activo.boolean' => 'El campo activo debe ser verdadero o falso.',
             'oficina_id.exists' => 'La oficina seleccionada no existe.',

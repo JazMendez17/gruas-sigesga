@@ -9,9 +9,12 @@ class UnidadMantenimiento extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'unidad_mantenimientos';
 
     protected $fillable = [
+        'empresa_id',
         'unidad_id',
         'tipo',
         'fecha',

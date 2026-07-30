@@ -38,7 +38,7 @@ class AutorizacionesCancelacionController extends Controller
 
     public function aprobar($id)
     {
-        $auth = AutorizacionesCancelacione::findOrFail($id);
+        $auth = AutorizacionesCancelacione::whereHas('servicio', fn($q) => $q->where('empresa_id', auth()->user()->empresa_id))->findOrFail($id);
         $auth->update([
             'estatus' => 'aprobada',
             'usuario_resolutor_id' => Auth::id(),
@@ -54,7 +54,7 @@ class AutorizacionesCancelacionController extends Controller
 
     public function rechazar($id)
     {
-        $auth = AutorizacionesCancelacione::findOrFail($id);
+        $auth = AutorizacionesCancelacione::whereHas('servicio', fn($q) => $q->where('empresa_id', auth()->user()->empresa_id))->findOrFail($id);
         $auth->update([
             'estatus' => 'rechazada',
             'usuario_resolutor_id' => Auth::id(),

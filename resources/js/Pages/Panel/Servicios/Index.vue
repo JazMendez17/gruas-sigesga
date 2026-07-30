@@ -60,7 +60,7 @@ function eliminarServicio(id) {
           <NeumorphicButton variant="secondary" @click="alert('Exportando...')">
             Exportar
           </NeumorphicButton>
-          <NeumorphicButton @click="router.visit(route('panel.cotizaciones.create'))">
+          <NeumorphicButton @click="router.visit(route('panel.servicios.create'))">
             + Nuevo Servicio
           </NeumorphicButton>
         </div>

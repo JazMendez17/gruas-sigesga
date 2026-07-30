@@ -11,6 +11,8 @@ class TarifasEmpresa extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'tarifas_empresa';
+
     protected $fillable = [
         'empresa_id',
         'tipo_servicio_id',

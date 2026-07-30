@@ -65,7 +65,7 @@ class FacturacionController extends Controller
 
     public function show($id)
     {
-        $factura = Factura::with(['cliente', 'servicio.cotizacion'])->findOrFail($id);
+        $factura = Factura::with(['cliente', 'servicio.cotizacion'])->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Facturacion/Show', [
             'factura' => $factura,

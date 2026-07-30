@@ -69,7 +69,7 @@ class EmpleadosController extends Controller
     public function show($id)
     {
         return Inertia::render('Panel/Empleados/Show', [
-            'empleado' => Empleado::with('oficina', 'direccion')->findOrFail($id),
+            'empleado' => Empleado::with('oficina', 'direccion')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
         ]);
     }
 
@@ -79,14 +79,14 @@ class EmpleadosController extends Controller
         $empresaId = $user->empresa_id;
 
         return Inertia::render('Panel/Empleados/Create', [
-            'empleado' => Empleado::with('direccion')->findOrFail($id),
+            'empleado' => Empleado::with('direccion')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
             'oficinas' => Oficina::where('empresa_id', $empresaId)->get(['id', 'nombre']),
         ]);
     }
 
     public function update(StoreEmpleadoRequest $request, $id)
     {
-        $empleado = Empleado::findOrFail($id);
+        $empleado = Empleado::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -109,9 +109,9 @@ class EmpleadosController extends Controller
 
     public function destroy($id)
     {
-        $empleado = Empleado::findOrFail($id);
+        $empleado = Empleado::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
-        if ($empleado->operadore || $empleado->usuario) {
+        if ($empleado->operador || $empleado->usuario) {
             return redirect()->back()->with('error', 'No se puede eliminar el empleado porque está vinculado a un operador o usuario.');
         }
 

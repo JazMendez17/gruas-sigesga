@@ -10,6 +10,8 @@ class CalificacionesServicio extends Model
 {
     use HasFactory;
 
+    protected $table = 'calificaciones_servicio';
+
     public $timestamps = false;
 
     protected $fillable = [

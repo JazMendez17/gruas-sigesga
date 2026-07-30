@@ -77,7 +77,7 @@ class ClientesController extends Controller
     public function show($id)
     {
         $cliente = Cliente::with(['aseguradora', 'direccion', 'cotizaciones.tipoServicio', 'facturas'])
-            ->findOrFail($id);
+            ->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Clientes/Show', [
             'cliente' => [
@@ -101,7 +101,7 @@ class ClientesController extends Controller
                 'aseguradora' => $cliente->aseguradora?->nombre ?? '—',
                 'direccion' => $cliente->direccion ? [
                     'calle' => $cliente->direccion->calle,
-                    'numero' => $cliente->direccion->numero,
+                    'numero' => $cliente->direccion->numero_exterior,
                     'colonia' => $cliente->direccion->colonia,
                     'ciudad' => $cliente->direccion->ciudad,
                     'estado' => $cliente->direccion->estado,
@@ -124,14 +124,14 @@ class ClientesController extends Controller
         $empresaId = $user->empresa_id;
 
         return Inertia::render('Panel/Clientes/Create', [
-            'cliente' => Cliente::with('direccion')->findOrFail($id),
+            'cliente' => Cliente::with('direccion')->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
             'aseguradoras' => Aseguradora::where('empresa_id', $empresaId)->get(['id', 'nombre']),
         ]);
     }
 
     public function update(StoreClienteRequest $request, $id)
     {
-        $cliente = Cliente::findOrFail($id);
+        $cliente = Cliente::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -174,7 +174,7 @@ class ClientesController extends Controller
 
     public function destroy($id)
     {
-        $cliente = Cliente::findOrFail($id);
+        $cliente = Cliente::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $cotizacionesCount = $cliente->cotizaciones()->count();
         if ($cotizacionesCount > 0) {

@@ -64,7 +64,7 @@ const servicios = [
 const accesos = [
     { titulo: 'Solicitar Servicio', descripcion: 'Solicita una grúa o asistencia de forma rápida y sencilla.', enlace: '/solicitar', icono: 'clipboard' },
     { titulo: 'Rastrear Servicio', descripcion: 'Da seguimiento en tiempo real a tu solicitud de servicio.', enlace: '/rastrear', icono: 'search' },
-    { titulo: 'Facturación', descripcion: 'Consulta y paga tus facturas en línea de manera segura.', enlace: '/facturacion', icono: 'document' },
+    { titulo: 'Facturación', descripcion: 'Consulta y paga tus facturas en línea de manera segura.', enlace: '/login', icono: 'document' },
     { titulo: 'Soporte', descripcion: 'Comunícate con nuestro equipo de soporte técnico.', enlace: '/soporte', icono: 'chat' },
 ]
 

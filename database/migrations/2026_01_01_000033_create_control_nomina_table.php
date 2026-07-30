@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('control_nomina', function (Blueprint $table) {
             $table->id();
-            $table->integer('empresa_id');
-            $table->integer('operador_id');
+            $table->foreignId('empresa_id')->constrained('empresas')->onDelete('cascade');
+            $table->foreignId('operador_id')->constrained('operadores')->onDelete('cascade');
             $table->date('fecha_desde');
             $table->date('fecha_hasta');
             $table->decimal('sueldo_base_semanal', 10, 2);

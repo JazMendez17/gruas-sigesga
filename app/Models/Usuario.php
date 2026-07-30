@@ -67,12 +67,12 @@ class Usuario extends Authenticatable
 
     public function autorizacionesCancelacionSolicitante()
     {
-        return $this->hasMany(AutorizacionesCancelacione::class, 'solicitante_id');
+        return $this->hasMany(AutorizacionesCancelacione::class, 'usuario_solicitante_id');
     }
 
     public function autorizacionesCancelacionResolutor()
     {
-        return $this->hasMany(AutorizacionesCancelacione::class, 'resolutor_id');
+        return $this->hasMany(AutorizacionesCancelacione::class, 'usuario_resolutor_id');
     }
 
     public function notificaciones()

@@ -19,11 +19,16 @@ class IntegracionesController extends Controller
             ->get()
             ->map(fn ($i) => [
                 'id' => $i->id,
-                'titulo' => $i->titulo ?? '—',
-                'descripcion' => $i->descripcion ?? '',
-                'icono' => $i->icono ?? 'puzzle',
+                'titulo' => ucfirst($i->proveedor),
+                'descripcion' => $i->configuracion_json['descripcion'] ?? '',
+                'icono' => match ($i->proveedor) {
+                    'whatsapp' => 'message-circle',
+                    'gmail' => 'mail',
+                    'google_maps' => 'map',
+                    default => 'puzzle',
+                },
                 'activo' => $i->activo ?? false,
-                'configurado' => !empty($i->url),
+                'configurado' => !empty($i->api_key),
             ]);
 
         return Inertia::render('Panel/Integraciones/Index', [
@@ -33,11 +38,10 @@ class IntegracionesController extends Controller
 
     public function update(Request $request, $id)
     {
-        $integracion = EmpresaIntegracione::findOrFail($id);
+        $integracion = EmpresaIntegracione::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validate([
             'activo' => 'nullable|boolean',
-            'url' => 'nullable|string|max:500',
             'api_key' => 'nullable|string|max:500',
         ]);
 

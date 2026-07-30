@@ -66,7 +66,7 @@ class CotizacionesController extends Controller
 
     public function show($id)
     {
-        $cotizacion = Cotizacione::with(['cliente', 'tipoServicio', 'usuarioCreador', 'servicio'])->findOrFail($id);
+        $cotizacion = Cotizacione::with(['cliente', 'tipoServicio', 'usuarioCreador', 'servicio'])->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Cotizaciones/Show', [
             'cotizacion' => [
@@ -90,7 +90,7 @@ class CotizacionesController extends Controller
     {
         $user = Auth::user();
         $empresaId = $user->empresa_id;
-        $cotizacion = Cotizacione::findOrFail($id);
+        $cotizacion = Cotizacione::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Cotizaciones/Create', [
             'cotizacion' => $cotizacion,
@@ -101,7 +101,7 @@ class CotizacionesController extends Controller
 
     public function update(StoreCotizacionRequest $request, $id)
     {
-        $cotizacion = Cotizacione::findOrFail($id);
+        $cotizacion = Cotizacione::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -113,7 +113,7 @@ class CotizacionesController extends Controller
 
     public function destroy($id)
     {
-        Cotizacione::findOrFail($id)->delete();
+        Cotizacione::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id)->delete();
 
         return redirect()->route('panel.cotizaciones.index')
             ->with('success', 'Cotización eliminada correctamente');

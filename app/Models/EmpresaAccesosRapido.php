@@ -9,6 +9,8 @@ class EmpresaAccesosRapido extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $table = 'empresa_accesos_rapidos';
 
     protected $fillable = [

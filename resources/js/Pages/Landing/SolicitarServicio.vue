@@ -9,7 +9,7 @@ const form = ref({
 })
 
 const submitForm = () => {
-    router.post('/solicitar', form.value)
+    router.post(route('solicitar.store'), form.value)
 }
 </script>
 

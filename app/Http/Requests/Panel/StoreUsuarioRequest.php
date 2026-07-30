@@ -18,15 +18,18 @@ class StoreUsuarioRequest extends FormRequest
         $data = $this->all();
         array_walk_recursive($data, function (&$value) {
             if (is_string($value)) {
-                $value = trim($value);
+                $value = trim($value) === '' ? null : trim($value);
             }
         });
         $this->merge($data);
+        if ($this->isJson()) {
+            $this->json()->replace($data);
+        }
     }
 
     public function rules(): array
     {
-        $id = $this->route('usuario');
+        $id = $this->route('id');
 
         $rules = [
             'name' => 'required|string|max:255',

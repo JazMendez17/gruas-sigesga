@@ -66,14 +66,14 @@ class TarifasPropiasController extends Controller
         $empresaId = $user->empresa_id;
 
         return Inertia::render('Panel/TarifasPropias/Create', [
-            'tarifa' => TarifasEmpresa::findOrFail($id),
+            'tarifa' => TarifasEmpresa::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
             'tiposServicio' => CatalogoServicio::where('empresa_id', $empresaId)->get(['id', 'nombre']),
         ]);
     }
 
     public function update(StoreTarifaPropiaRequest $request, $id)
     {
-        $tarifa = TarifasEmpresa::findOrFail($id);
+        $tarifa = TarifasEmpresa::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
         $data['activo'] = $request->boolean('activo');
@@ -86,7 +86,7 @@ class TarifasPropiasController extends Controller
 
     public function destroy($id)
     {
-        TarifasEmpresa::findOrFail($id)->delete();
+        TarifasEmpresa::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id)->delete();
 
         return redirect()->route('panel.tarifas-propias.index')
             ->with('success', 'Tarifa eliminada correctamente');

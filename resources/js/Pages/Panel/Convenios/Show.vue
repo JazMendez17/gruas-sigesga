@@ -77,7 +77,7 @@ const datosFacturacion = {
           <NeumorphicButton variant="secondary" @click="router.visit(route('panel.convenios.index'))">
             Volver
           </NeumorphicButton>
-          <NeumorphicButton @click="alert('Editar convenio')">
+          <NeumorphicButton @click="router.visit(route('panel.convenios.edit', convenio.id))">
             Editar
           </NeumorphicButton>
         </div>

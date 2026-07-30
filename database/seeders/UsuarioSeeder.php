@@ -11,74 +11,62 @@ class UsuarioSeeder extends Seeder
     public function run(): void
     {
         $empresaId = DB::table('empresas')->first()->id;
-        $empleadoAdmin = DB::table('empleados')->where('puesto', 'Administrador')->first();
-        $empleadoOperador = DB::table('empleados')->where('puesto', 'Operador de Grúa')->first();
+        $password = Hash::make('123456');
 
-        DB::table('usuarios')->insert([
+        $usuarios = [
             [
-                'empresa_id' => $empresaId,
-                'empleado_id' => $empleadoAdmin->id,
+                'empleado_puesto' => 'Administrador',
                 'name' => 'Juan Carlos Pérez',
                 'email' => 'admin@sigesga.com',
-                'password' => Hash::make('123456'),
-                'password_reset_token' => null,
-                'password_reset_expires_at' => null,
                 'rol' => 'admin',
-                'intentos_fallidos' => 0,
-                'cuenta_bloqueada' => false,
-                'bloqueada_en' => null,
-                'desbloqueada_por' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
-                'empresa_id' => $empresaId,
-                'empleado_id' => null,
+                'empleado_puesto' => 'Cotizador',
                 'name' => 'Cotizador Sistema',
                 'email' => 'cotizador@sigesga.com',
-                'password' => Hash::make('123456'),
-                'password_reset_token' => null,
-                'password_reset_expires_at' => null,
                 'rol' => 'cotizador',
-                'intentos_fallidos' => 0,
-                'cuenta_bloqueada' => false,
-                'bloqueada_en' => null,
-                'desbloqueada_por' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
-                'empresa_id' => $empresaId,
-                'empleado_id' => $empleadoOperador->id,
+                'empleado_puesto' => 'Operador de Grúa',
                 'name' => 'Roberto Méndez',
                 'email' => 'operador@sigesga.com',
-                'password' => Hash::make('123456'),
-                'password_reset_token' => null,
-                'password_reset_expires_at' => null,
                 'rol' => 'operador',
-                'intentos_fallidos' => 0,
-                'cuenta_bloqueada' => false,
-                'bloqueada_en' => null,
-                'desbloqueada_por' => null,
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
             [
-                'empresa_id' => $empresaId,
-                'empleado_id' => null,
+                'empleado_puesto' => 'Cliente',
                 'name' => 'Cliente Demo',
                 'email' => 'cliente@sigesga.com',
-                'password' => Hash::make('123456'),
+                'rol' => 'cliente',
+            ],
+        ];
+
+        foreach ($usuarios as $data) {
+            $existing = DB::table('usuarios')->where('email', $data['email'])->first();
+            if ($existing) {
+                continue;
+            }
+
+            $empleado = DB::table('empleados')
+                ->where('empresa_id', $empresaId)
+                ->where('puesto', $data['empleado_puesto'])
+                ->first();
+
+            DB::table('usuarios')->insert([
+                'empresa_id' => $empresaId,
+                'empleado_id' => $empleado?->id,
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $password,
                 'password_reset_token' => null,
                 'password_reset_expires_at' => null,
-                'rol' => 'cliente',
+                'rol' => $data['rol'],
                 'intentos_fallidos' => 0,
                 'cuenta_bloqueada' => false,
                 'bloqueada_en' => null,
                 'desbloqueada_por' => null,
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
-        ]);
+            ]);
+        }
     }
 }

@@ -30,7 +30,8 @@ Route::get('/', [LandingController::class, 'index']);
 
 Route::post('/contacto', [ContactoController::class, 'store']);
 
-Route::get('/solicitar', [LandingController::class, 'solicitar']);
+Route::get('/solicitar', [LandingController::class, 'solicitar'])->name('solicitar');
+Route::post('/solicitar', [LandingController::class, 'solicitarStore'])->name('solicitar.store');
 Route::get('/rastrear', [LandingController::class, 'rastrear']);
 Route::get('/soporte', [LandingController::class, 'soporte']);
 

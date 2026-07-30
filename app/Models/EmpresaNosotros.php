@@ -16,6 +16,7 @@ class EmpresaNosotros extends Model
         'quienes_somos',
         'mision',
         'vision',
+        'prioridad',
     ];
 
     public function empresa()

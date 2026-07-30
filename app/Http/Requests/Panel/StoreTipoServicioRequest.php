@@ -18,15 +18,18 @@ class StoreTipoServicioRequest extends FormRequest
         $data = $this->all();
         array_walk_recursive($data, function (&$value) {
             if (is_string($value)) {
-                $value = trim($value);
+                $value = trim($value) === '' ? null : trim($value);
             }
         });
         $this->merge($data);
+        if ($this->isJson()) {
+            $this->json()->replace($data);
+        }
     }
 
     public function rules(): array
     {
-        $id = $this->route('tipos_servicio');
+        $id = $this->route('id');
 
         return [
             'nombre' => 'required|string|max:255|unique:catalogo_servicios,nombre,' . $id,

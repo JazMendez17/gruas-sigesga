@@ -89,7 +89,7 @@ class ServiciosController extends Controller
         $servicio = Servicio::with([
             'cotizacion.cliente', 'cotizacion.tipoServicio',
             'operador.empleado', 'unidad', 'bitacoraTiemposServicio',
-        ])->findOrFail($id);
+        ])->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Servicios/Show', [
             'servicio' => [
@@ -122,7 +122,7 @@ class ServiciosController extends Controller
 
     public function edit($id)
     {
-        $servicio = Servicio::findOrFail($id);
+        $servicio = Servicio::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Servicios/Create', [
             'servicio' => $servicio,
@@ -131,7 +131,7 @@ class ServiciosController extends Controller
 
     public function update(StoreServicioRequest $request, $id)
     {
-        $servicio = Servicio::findOrFail($id);
+        $servicio = Servicio::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
 
@@ -163,7 +163,7 @@ class ServiciosController extends Controller
 
     public function destroy($id)
     {
-        Servicio::findOrFail($id)->delete();
+        Servicio::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id)->delete();
 
         return redirect()->route('panel.servicios.index')
             ->with('success', 'Servicio eliminado correctamente');

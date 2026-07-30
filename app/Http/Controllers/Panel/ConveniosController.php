@@ -68,7 +68,7 @@ class ConveniosController extends Controller
             'aseguradora', 'tipoServicio',
             'convenioCoberturas', 'convenioUnidadesAutorizadas',
             'convenioManiobrasEspeciales', 'convenioDocumentosRequeridos',
-        ])->findOrFail($id);
+        ])->where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         return Inertia::render('Panel/Convenios/Show', [
             'convenio' => [
@@ -101,7 +101,7 @@ class ConveniosController extends Controller
         $empresaId = $user->empresa_id;
 
         return Inertia::render('Panel/Convenios/Edit', [
-            'convenio' => Convenio::findOrFail($id),
+            'convenio' => Convenio::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id),
             'aseguradoras' => Aseguradora::where('empresa_id', $empresaId)->get(['id', 'nombre']),
             'tiposServicio' => CatalogoServicio::where('empresa_id', $empresaId)->get(['id', 'nombre']),
         ]);
@@ -109,7 +109,7 @@ class ConveniosController extends Controller
 
     public function update(StoreConvenioRequest $request, $id)
     {
-        $convenio = Convenio::findOrFail($id);
+        $convenio = Convenio::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         $data = $request->validated();
         $data['cubre_casetas_peaje'] = $request->boolean('cubre_casetas_peaje');
@@ -122,7 +122,7 @@ class ConveniosController extends Controller
 
     public function destroy($id)
     {
-        $convenio = Convenio::findOrFail($id);
+        $convenio = Convenio::where('empresa_id', auth()->user()->empresa_id)->findOrFail($id);
 
         if ($convenio->cotizaciones()->count() > 0) {
             return redirect()->back()->with('error', 'No se puede eliminar el convenio porque tiene cotizaciones asociadas.');

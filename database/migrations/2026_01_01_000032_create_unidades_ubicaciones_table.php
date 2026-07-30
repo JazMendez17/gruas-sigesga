@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('unidades_ubicaciones', function (Blueprint $table) {
             $table->id();
-            $table->integer('unidad_id');
-            $table->integer('servicio_id')->nullable();
+            $table->foreignId('unidad_id')->constrained('unidades')->onDelete('cascade');
+            $table->foreignId('servicio_id')->nullable()->constrained('servicios')->onDelete('set null');
             $table->decimal('lat', 10, 8);
             $table->decimal('lng', 11, 8);
             $table->timestamp('registrado_en')->useCurrent();

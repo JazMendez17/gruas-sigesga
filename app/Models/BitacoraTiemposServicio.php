@@ -10,6 +10,8 @@ class BitacoraTiemposServicio extends Model
 {
     use HasFactory;
 
+    protected $table = 'bitacora_tiempos_servicio';
+
     public $timestamps = false;
 
     protected $fillable = [
