@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue'
-import { Head, router, usePage } from '@inertiajs/vue3'
+import { Head, usePage } from '@inertiajs/vue3'
 import { useTheme } from '@/Composables/useTheme'
 
 useTheme()
@@ -46,11 +46,6 @@ const scrollTo = (id) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' })
 }
 
-const goTo = (path) => {
-    mobileMenuOpen.value = false
-    window.location.href = path
-}
-
 const navLinks = [
     { label: 'Inicio', id: 'inicio' },
     { label: 'Nosotros', id: 'nosotros' },
@@ -91,7 +86,11 @@ const form = reactive({
 
 const submitContacto = () => {
     if (!form.nombre || !form.email || !form.mensaje) return
-    router.post('/contacto', { ...form })
+    fetch('/contacto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name=csrf-token]')?.content },
+        body: JSON.stringify({ ...form }),
+    })
     form.nombre = ''
     form.email = ''
     form.mensaje = ''
@@ -168,18 +167,18 @@ const getIcon = (name) => icons[name] || ''
                     </a>
                 </div>
 
-                <div class="hidden md:flex items-center gap-3">
-                    <button @click="goTo('/login')"
-                            class="px-5 py-2 rounded-2xl text-sm font-medium transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#c9ced3,-6px_-6px_12px_#ffffff]"
-                            :style="{ color: 'var(--color-primary)' }">
-                        Iniciar Sesión
-                    </button>
-                    <button @click="goTo('/register')"
-                            class="px-5 py-2 rounded-2xl text-sm font-semibold text-white transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#c9ced3,-6px_-6px_12px_#ffffff]"
-                            :style="{ backgroundColor: 'var(--color-primary)' }">
-                        Registrarse
-                    </button>
-                </div>
+<div class="hidden md:flex items-center gap-3">
+    <a href="/login"
+       class="px-5 py-2 rounded-2xl text-sm font-medium transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#c9ced3,-6px_-6px_12px_#ffffff]"
+       :style="{ color: 'var(--color-primary)' }">
+        Iniciar Sesión
+    </a>
+    <a href="/register"
+       class="px-5 py-2 rounded-2xl text-sm font-semibold text-white transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#c9ced3,-6px_-6px_12px_#ffffff]"
+       :style="{ backgroundColor: 'var(--color-primary)' }">
+        Registrarse
+    </a>
+</div>
 
                 <button @click="mobileMenuOpen = !mobileMenuOpen"
                         class="md:hidden p-2 rounded-2xl transition-all duration-200"
@@ -197,16 +196,16 @@ const getIcon = (name) => icons[name] || ''
                     {{ link.label }}
                 </a>
                 <hr class="border-gray-300 my-2" />
-                <button @click="goTo('/login')"
-                        class="block w-full px-4 py-3 rounded-2xl text-sm font-medium text-center transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
-                        :style="{ color: 'var(--color-primary)' }">
+                <a href="/login"
+                   class="block w-full px-4 py-3 rounded-2xl text-sm font-medium text-center transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
+                   :style="{ color: 'var(--color-primary)' }">
                     Iniciar Sesión
-                </button>
-                <button @click="goTo('/register')"
-                        class="block w-full px-4 py-3 rounded-2xl text-sm font-semibold text-white text-center transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
-                        :style="{ backgroundColor: 'var(--color-primary)' }">
+                </a>
+                <a href="/register"
+                   class="block w-full px-4 py-3 rounded-2xl text-sm font-semibold text-white text-center transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff]"
+                   :style="{ backgroundColor: 'var(--color-primary)' }">
                     Registrarse
-                </button>
+                </a>
             </div>
         </nav>
 
@@ -226,12 +225,12 @@ const getIcon = (name) => icons[name] || ''
                     <p v-if="empresa.slogan" class="text-xl md:text-2xl text-white/80 mb-10 font-light">
                         {{ empresa.slogan }}
                     </p>
-                    <button @click="goTo('/register')"
-                            class="inline-flex items-center gap-2 px-8 py-4 rounded-3xl text-lg font-semibold text-white transition-all duration-300 shadow-[8px_8px_16px_#00000033,-8px_-8px_16px_#ffffff1a] hover:shadow-[10px_10px_20px_#0000004d,-10px_-10px_20px_#ffffff33] hover:scale-[1.02]"
-                            :style="{ backgroundColor: 'var(--color-primary)' }">
+                    <a href="/register"
+                       class="inline-flex items-center gap-2 px-8 py-4 rounded-3xl text-lg font-semibold text-white transition-all duration-300 shadow-[8px_8px_16px_#00000033,-8px_-8px_16px_#ffffff1a] hover:shadow-[10px_10px_20px_#0000004d,-10px_-10px_20px_#ffffff33] hover:scale-[1.02]"
+                       :style="{ backgroundColor: 'var(--color-primary)' }">
                         Comenzar
                         <span class="w-5 h-5" v-html="getIcon('arrowRight')"></span>
-                    </button>
+                    </a>
                 </div>
             </div>
 
@@ -300,12 +299,12 @@ const getIcon = (name) => icons[name] || ''
                             </div>
                             <h4 class="text-base font-bold mb-2 text-gray-800">{{ acceso.titulo }}</h4>
                             <p class="text-sm text-gray-500 mb-4">{{ acceso.descripcion }}</p>
-                            <button @click="goTo(acceso.enlace)"
-                                    class="inline-flex items-center gap-1 text-sm font-semibold transition-all duration-200 hover:gap-2"
-                                    :style="{ color: 'var(--color-primary)' }">
+                            <a :href="acceso.enlace"
+                               class="inline-flex items-center gap-1 text-sm font-semibold transition-all duration-200 hover:gap-2"
+                               :style="{ color: 'var(--color-primary)' }">
                                 Acceder
                                 <span class="w-4 h-4" v-html="getIcon('arrowRight')"></span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -333,12 +332,12 @@ const getIcon = (name) => icons[name] || ''
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2" :style="{ color: svc.color }">{{ svc.tipo }}</h3>
                             <p class="text-gray-500 text-sm mb-5 leading-relaxed">{{ svc.descripcion }}</p>
-                            <button @click="goTo('/register')"
-                                    class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-white transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#c9ced3,-6px_-6px_12px_#ffffff]"
-                                    :style="{ backgroundColor: svc.color }">
+                            <a href="/register"
+                               class="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold text-white transition-all duration-200 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] hover:shadow-[6px_6px_12px_#c9ced3,-6px_-6px_12px_#ffffff]"
+                               :style="{ backgroundColor: svc.color }">
                                 Solicitar
                                 <span class="w-4 h-4" v-html="getIcon('arrowRight')"></span>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
