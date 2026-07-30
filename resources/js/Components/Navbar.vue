@@ -105,11 +105,6 @@ const menuGroups = computed(() => [
       </div>
 
       <div class="flex items-center gap-2 sm:gap-4">
-        <button @click="logout" class="neumorphic-raised p-2 rounded-xl" title="Cerrar sesi\u00f3n">
-          <svg class="w-5 h-5 text-[var(--color-text)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-          </svg>
-        </button>
         <div class="relative">
           <button @click="userMenuOpen = !userMenuOpen" @click.outside="userMenuOpen = false" class="flex items-center gap-3 neumorphic-raised rounded-2xl px-4 py-2 cursor-pointer">
             <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold" :style="{ backgroundColor: 'var(--color-primary)' }">
@@ -131,6 +126,11 @@ const menuGroups = computed(() => [
             </button>
           </div>
         </div>
+        <button @click="logout" class="neumorphic-raised p-2 rounded-xl" title="Cerrar sesi\u00f3n">
+          <svg class="w-5 h-5 text-[var(--color-text)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+          </svg>
+        </button>
       </div>
     </div>
 
