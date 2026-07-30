@@ -94,10 +94,10 @@ function canShowItem(item) {
   >
     <div class="flex flex-col h-full p-4">
       <div class="flex items-center gap-3 px-4 py-6 mb-6 neumorphic-raised rounded-2xl">
-        <div v-if="empresa?.logo" class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 shadow-[inset_2px_2px_4px_var(--neumorphic-dark),inset_-2px_-2px_4px_var(--neumorphic-light)]">
+        <div v-if="empresa?.logo" class="w-20 h-20 rounded-2xl overflow-hidden flex-shrink-0 shadow-[inset_2px_2px_4px_var(--neumorphic-dark),inset_-2px_-2px_4px_var(--neumorphic-light)]">
           <img :src="'/storage/' + empresa.logo" class="w-full h-full object-contain" alt="Logo" />
         </div>
-        <div v-else class="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-xl flex-shrink-0" :style="{ backgroundColor: 'var(--color-primary)' }">
+        <div v-else class="w-20 h-20 rounded-2xl flex items-center justify-center text-white font-bold text-2xl flex-shrink-0" :style="{ backgroundColor: 'var(--color-primary)' }">
           {{ empresa?.siglas?.charAt(0) || 'S' }}
         </div>
         <div class="min-w-0 flex-1">
