@@ -11,6 +11,7 @@ const props = defineProps({
     nosotros: { type: Object, default: () => ({ quienes_somos: '', mision: '', vision: '' }) },
     valores: { type: Array, default: () => [] },
     servicios_landing: { type: Array, default: () => [] },
+    modulo_colores: { type: Object, default: () => ({}) },
 })
 
 const activeTab = ref('general')
@@ -25,6 +26,7 @@ const form = useForm({
   email_contacto: empresaData.email_contacto || '',
   color_primario: empresaData.color_primario || '#4F46E5',
   color_secundario: empresaData.color_secundario || '#7C3AED',
+  color_fondo: empresaData.color_fondo || '#E8EDF2',
   color_texto: empresaData.color_texto || '#1F2937',
   tipografia: empresaData.tipografia || 'Inter',
   modo_oscuro: empresaData.modo_oscuro || false,
@@ -35,6 +37,7 @@ const form = useForm({
 const nosotros = reactive({ ...props.nosotros })
 const valores = reactive(props.valores.map(v => ({ ...v })))
 const serviciosLanding = reactive(props.servicios_landing.map(s => ({ ...s })))
+const moduloColores = reactive({ ...props.modulo_colores })
 
 function agregarValor() {
   valores.push({ valor: '', descripcion: '' })
@@ -79,6 +82,7 @@ function guardarCambios() {
     nosotros: { ...nosotros },
     valores: valores.map(v => ({ valor: v.valor, descripcion: v.descripcion })),
     servicios_landing: serviciosLanding.map(s => ({ tipo: s.tipo, descripcion: s.descripcion, foto: s.foto })),
+    modulo_colores: { ...moduloColores },
   }
   form.transform(() => payload).post(route('panel.configuracion.update'), {
     preserveScroll: true,
@@ -163,7 +167,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
       <!-- Tabs -->
       <div class="flex flex-wrap gap-2">
         <button
-          v-for="tab in ['general', 'apariencia', 'nosotros', 'servicios', 'contacto']"
+          v-for="tab in ['general', 'apariencia', 'nosotros', 'servicios', 'modulos', 'contacto']"
           :key="tab"
           @click="activeTab = tab"
           class="rounded-xl px-5 py-2 text-sm font-medium capitalize transition-all duration-200"
@@ -171,7 +175,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
             ? 'bg-[var(--color-surface)] text-[var(--color-primary)] shadow-[4px_4px_8px_var(--neumorphic-dark),-4px_-4px_8px_var(--neumorphic-light)]'
             : 'bg-transparent text-gray-500 hover:text-gray-700'"
         >
-          {{ tab === 'nosotros' ? 'Nosotros' : tab === 'servicios' ? 'Servicios (landing)' : tab }}
+          {{ tab === 'nosotros' ? 'Nosotros' : tab === 'servicios' ? 'Servicios (landing)' : tab === 'modulos' ? 'Módulos' : tab }}
         </button>
       </div>
 
@@ -184,7 +188,7 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
           <label class="block text-sm font-medium text-[#4B5563] mb-2">Logo</label>
           <div class="flex items-center gap-4">
             <div class="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#E8EDF2] shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
-              <img v-if="form.logo" :src="'/storage/' + form.logo" class="h-full w-full rounded-2xl object-cover" />
+              <img v-if="form.logo" :src="'/storage/' + form.logo" class="h-full w-full rounded-2xl object-cover" @error="$event.target.style.display='none'" />
               <svg v-else class="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
             </div>
             <button @click="uploadFile('logo')" class="rounded-xl bg-[#E8EDF2] px-4 py-2 text-sm text-gray-600 shadow-[4px_4px_8px_#d0d5da,-4px_-4px_8px_#ffffff] transition-all hover:text-gray-800">Seleccionar archivo</button>
@@ -324,6 +328,21 @@ onUnmounted(() => document.removeEventListener('mousedown', onClickOutside))
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Módulos -->
+      <div v-if="activeTab === 'modulos'" class="rounded-3xl bg-[var(--color-surface)] p-6 shadow-[8px_8px_16px_var(--neumorphic-dark),-8px_-8px_16px_var(--neumorphic-light)] space-y-5">
+        <h3 class="text-sm font-medium text-[#4B5563] mb-4">Colores de Módulos</h3>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div v-for="(color, modulo) in moduloColores" :key="modulo" class="space-y-2 rounded-2xl bg-[#E8EDF2] p-4 shadow-[inset_4px_4px_8px_#d0d5da,inset_-4px_-4px_8px_#ffffff]">
+            <label class="block text-sm font-medium text-[#4B5563] capitalize">{{ modulo }}</label>
+            <div class="flex items-center gap-3">
+              <input type="color" :value="moduloColores[modulo]" @input="moduloColores[modulo] = $event.target.value" class="h-10 w-10 rounded-xl border-0 bg-transparent cursor-pointer" />
+              <input :value="moduloColores[modulo]" @input="moduloColores[modulo] = $event.target.value" class="w-full rounded-xl bg-[#EEF2F7] px-3 py-2 text-sm text-[#1F2937] shadow-[inset_3px_3px_6px_#d0d5da,inset_-3px_-3px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-indigo-300" />
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-2">Si no ves todos los módulos, guarda la configuración general primero para inicializarlos.</p>
       </div>
 
       <!-- Contacto -->

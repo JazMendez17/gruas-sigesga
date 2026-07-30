@@ -34,6 +34,7 @@ class ConfiguracionController extends Controller
                 'descripcion' => $s->descripcion,
                 'foto' => $s->foto,
             ]) ?? [],
+            'modulo_colores' => $empresa?->empresaModuloColores?->pluck('color', 'modulo')->toArray() ?? [],
         ]);
     }
 
@@ -55,6 +56,7 @@ class ConfiguracionController extends Controller
             'email_contacto' => 'nullable|email|max:255',
             'color_primario' => 'nullable|string|max:20',
             'color_secundario' => 'nullable|string|max:20',
+            'color_fondo' => 'nullable|string|max:20',
             'color_texto' => 'nullable|string|max:20',
             'tipografia' => 'nullable|string|max:100',
             'modo_oscuro' => 'nullable|boolean',
@@ -101,6 +103,19 @@ class ConfiguracionController extends Controller
                     'foto' => $s['foto'] ?? null,
                     'orden' => $i,
                 ]);
+            }
+        }
+
+        // Guardar colores de módulos
+        $moduloColores = $request->input('modulo_colores', []);
+        if (!empty($moduloColores)) {
+            foreach ($moduloColores as $modulo => $color) {
+                if (!empty($color)) {
+                    $empresa->empresaModuloColores()->updateOrCreate(
+                        ['modulo' => $modulo],
+                        ['color' => $color]
+                    );
+                }
             }
         }
 
