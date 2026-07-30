@@ -70,7 +70,6 @@ function uploadServicioFoto(index) {
       onSuccess: (page) => {
         serviciosLanding[index].foto = page.props.flash?.uploaded_path || file.name
       },
-      onError: () => alert('Error al subir imagen'),
     })
   }
   input.click()
@@ -86,8 +85,6 @@ function guardarCambios() {
   }
   form.transform(() => payload).post(route('panel.configuracion.update'), {
     preserveScroll: true,
-    onSuccess: () => alert('Configuración guardada'),
-    onError: () => alert('Error al guardar'),
   })
 }
 
@@ -115,9 +112,7 @@ function uploadFile(type) {
       preserveScroll: true,
       onSuccess: (page) => {
         form[type] = page.props.flash?.uploaded_path || file.name
-        alert('Imagen subida correctamente')
       },
-      onError: () => alert('Error al subir imagen'),
     })
   }
   input.click()
